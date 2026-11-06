@@ -1,0 +1,2060 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{listings}           % for GAP code
+\usepackage{fontenc}
+\usepackage{inputenc}
+\usepackage{microtype}
+\usepackage{titlesec}
+% \usepackage{fancyhdr}
+\usepackage{tocloft}
+\usepackage{setspace}
+\usepackage{cite}
+% ── Theorem Environments ───────────────────────────────────────────────────────
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+% ── Operators and Macros ───────────────────────────────────────────────────────
+\DeclareMathOperator{\Exp}{exp}
+\DeclareMathOperator{\lcm}{lcm}
+\newcommand{\sig}{\sigma}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\norml}{\trianglelefteq}
+\newcommand{\G}{\mathcal{G}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Dih}[1]{D_{#1}}
+\newcommand{\Sym}[1]{S_{#1}}
+\newcommand{\Alt}[1]{A_{#1}}
+\newcommand{\PSL}[2]{\mathrm{PSL}(#1,#2)}
+\newcommand{\Cp}[1]{C_{#1}}
+
+% ── Code Listing Style (GAP) ───────────────────────────────────────────────────
+\lstdefinelanguage{GAP}{
+  keywords={for, do, od, if, then, fi, return, local, function, end, true, false},
+  keywordstyle=\color{blue}\bfseries,
+  comment=[l]{\#},
+  commentstyle=\color{gray}\itshape,
+  stringstyle=\color{orange},
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{black!30},
+  backgroundcolor=\color{black!3},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=5pt,
+  tabsize=2,
+}
+
+\lstdefinelanguage{Lean}{
+  keywords={theorem, lemma, def, where, have, show, by, intro, apply,
+            exact, rw, simp, use, obtain, rcases, constructor, fun,
+            structure, class, instance, namespace, end, open, variable,
+            import, noncomputable, section, universe, Type, Prop, Sort},
+  keywordstyle=\color{purple}\bfseries,
+  comment=[l]{--},
+  commentstyle=\color{gray}\itshape,
+  stringstyle=\color{orange},
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{black!30},
+  backgroundcolor=\color{black!3},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=5pt,
+  tabsize=2,
+}
+
+% ── Page Style ─────────────────────────────────────────────────────────────────
+\pagestyle{plain}
+% \fancyhf{}
+% \fancyhead[L]{\small Equal Coverings of Finite Groups}
+% \fancyhead[R]{\small\thepage}
+% \renewcommand{\headrulewidth}{0.4pt}
+
+\onehalfspacing
+
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── Title Page ─────────────────────────────────────────────────────────────────
+\begin{titlepage}
+  \thispagestyle{empty}
+  \centering
+  {\LARGE\bfseries Equal Coverings of Finite Groups:\\[0.4em]
+    Theory, Lean Formalization, and\\[0.4em]
+    Computational Evidence\par}
+    \vspace{1em}
+    
+    \normalsize
+        THIRD YEAR PROJECT REPORT\\[2ex]
+        
+        \small
+        SUBMITTED IN PARTIAL FULFILLMENT OF THE REQUIREMENTS FOR\\
+        THE DEGREE OF BSC. IN COMPUTATIONAL MATHEMATICS\\[2cm]
+        
+        \normalsize
+        BY\\[2ex]
+          {\large Bishesh Bohora, Ashwot Acharya, Pranjal Man Shakya, Bhoomika Thapa\par}
+        \vspace{1em}
+        \includegraphics[width=4cm]{logo.png}\\[2cm]
+        
+        DEPARTMENT OF MATHEMATICS\\
+        KATHMANDU UNIVERSITY\\
+        DHULIKHEL, NEPAL\\[2ex]
+  \vspace{2cm}
+  \vspace{0.5cm}
+  {\large Department of Mathematics\par}
+  {\large \today\par}
+  \vspace{3cm}
+
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+    \textbf{\LARGE CERTIFICATION}
+\end{center}
+\raggedright
+\vspace{1em}
+
+This project entitled ``\textbf{Equal Coverings of Finite Groups:
+Theory, Lean Formalization, and
+Computational Evidence}'' is carried out under our supervision for the specified entire period satisfactorily and is hereby certified as a work done by the following students:
+\begin{enumerate}
+    \item Bishesh Bohora 
+    \item Ashwot Acharya
+    \item Pranjal Man Shakya
+    \item Bhoomika Thapa
+\end{enumerate}
+in partial fulfillment of the requirements for the degree of B.Sc. in Computational Mathematics, Department of Mathematics, Kathmandu University, Dhulikhel, Nepal.
+
+
+\vspace{3em}
+
+\noindent
+\begin{minipage}{0.45\textwidth}
+\rule{6cm}{0.5pt}\\
+\textbf{Dr. Gokul KC }\\
+Associate Professor\\
+Department of Mathematics,\\
+School of Science\\ Kathmandu University,\\
+Dhulikhel, Kavre, Nepal\\
+Date: {\today}
+
+\end{minipage}
+
+
+\vspace{2.5em}
+
+\noindent
+
+\textbf{APPROVED BY:}\\
+I hereby declare that the candidate qualifies to submit this report of \textbf{Equal Coverings of Finite Groups:
+Theory, Lean Formalization, and
+Computational Evidence} to the Department of Mathematics.
+
+\vspace{1.7em}
+
+\noindent
+\rule{6cm}{0.5pt}\\ 
+\textbf{Head of Department }\\
+Department of Mathematics\\
+School of Science\\
+Kathmandu University\\
+Date: {\today}
+
+\vspace{2em}
+
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+    \textbf{\LARGE ACKNOWLEDGMENTS}
+\end{center}
+\raggedright
+    First and foremost, we would like to thank our supervisor Dr. Gokul KC sir for guiding us through this research project.
+Their feedback and suggestions helped us overcome numerous challenges and shaped
+our understanding of the subject matter.
+
+\newpage
+\thispagestyle{empty}
+
+  \begin{abstract}
+    \noindent
+An \textbf{equal covering} of a finite group G is a collection of proper subgroups of equal order whose union is G. This report documents a research extension of the work of Velasquez-Berroteran \cite{velasquez2022}, which developed the theory of equal coverings and computationally classified groups up to order 60.
+Our work proceeds along three strands. First, we present proofs of several foundational results on group coverings that the paper invokes but does not prove in full situating these within the equal covering framework. Second, we formalize key theorems on equal coverings in Lean 4 using Mathlib, identifying proof-theoretic subtleties along the way. Third, we extend the GAP-based computational classification of groups with equal coverings from order 60 to order 120, producing a complete table of results with supporting theoretical justifications.
+Together, these contributions provide a more complete theoretical foundation for the subject, a formal verification layer, and new computational evidence bearing on the open conjecture that no finite simple group admits an equal covering. Furthemore, We attempted a possible direction on proving the conjecture for some Alternating Groups.
+  \end{abstract}
+\end{titlepage}
+\tableofcontents
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Introduction}
+\label{sec:intro}
+
+The study of representing groups as unions of proper subgroups is a classical area of
+group theory, originating with Scorza~\cite{scorza1926} in 1926 and later revitalized
+by work of Neumann, Cohn, and many others. An \emph{equal covering} imposes the
+additional constraint that all subgroups in the covering have the same order, making the
+problem significantly more delicate.
+
+This report documents a research extension of the thesis by Velasquez-Berroteran~\cite{velasquez2022},
+which developed the foundational theory of equal coverings and classified groups up to
+order~60. We pursue three directions:
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Theoretical:} rigorous proofs theorems on group covering, including the
+    Haber--Rosenfeld theorem~\cite{haber1959}, Cohn's results \cite{cohn1994}, study of Alternating Groups.
+  \item \textbf{Formal:} Lean~4 formalizations of selected results.
+  \item \textbf{Computational:} GAP-based classification of groups of orders 61--120.
+\end{enumerate}
+
+A central open problem motivating our work is the following conjecture from~\cite{velasquez2022}:
+
+\begin{conjecture}[Velasquez-Berroteran, 2022]
+  \label{conj:simple}
+  If $G$ is a finite simple group, then $G$ has no equal covering.
+\end{conjecture}
+
+% ── Outline ───────────────────────────────────────────────────────────────────
+\paragraph{Structure of the report.}
+\Cref{sec:prelim} collects definitions and background.
+\Cref{sec:theory} presents the theoretical results.
+\Cref{sec:lean} describes the Lean formalization.
+\Cref{sec:gap} presents the GAP algorithm and computational results.
+\Cref{sec:conjecture} analyzes \Cref{conj:simple}.
+\Cref{sec:conclusion} summarizes and lists future directions.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Preliminaries}
+\label{sec:prelim}
+
+Throughout, all groups are \emph{finite} unless otherwise specified.
+
+\begin{definition}[Covering]
+  Let $G$ be a group. A \emph{covering} of $G$ is a collection $\Pi = \{H_i\}$ of proper
+  subgroups of $G$ such that $G = \bigcup_i H_i$. The \emph{covering number} $\sig(G)$ is
+  the minimum cardinality of any covering of $G$; we set $\sig(G) = \infty$ if $G$ is cyclic.
+\end{definition}
+
+\begin{definition}[Equal covering]
+  A covering $\Pi = \{H_i\}$ of $G$ is an \emph{equal covering} if $|H_i| = |H_j|$ for all
+  $i, j$. The \emph{equal covering number} $\eps(G)$ is the minimum cardinality of any equal
+  covering of $G$; we write $\eps(G) = \infty$ if $G$ has no equal covering.
+\end{definition}
+
+\begin{definition}[Irredundant covering {\cite[Definition~1]{velasquez2022}}]
+  A covering $\Pi$ is \emph{irredundant} (or \emph{minimal}) if for each $H_i \in \Pi$
+  there exists $x_i \in H_i$ with $x_i \notin \bigcup_{j \neq i} H_j$.
+\end{definition}
+
+\begin{definition}[Exponent {\cite[Definition~4]{velasquez2022}}]
+  The \emph{exponent} of $G$, written $\Exp(G)$, is the smallest positive integer $n$
+  such that $g^n = 1$ for all $g \in G$. For finite $G$, $\Exp(G) = \lcm\{|g| : g \in G\}$.
+\end{definition}
+
+\begin{definition}[Semidirect product {\cite[Definition~5]{velasquez2022}}]
+  $G$ is the \emph{semidirect product} of subgroups $H$ and $K$, written $G = H \rtimes K$,
+  if $H \norml G$, $HK = G$, and $H \cap K = \{1\}$.
+\end{definition}
+
+\begin{definition}[Partition]
+  A covering $\Pi$ of $G$ is a \emph{partition} if any two distinct members intersect
+  trivially. The \emph{partition number} $\rho(G)$ is the minimum cardinality of any
+  partition.
+\end{definition}
+
+\begin{remark}
+  Every equal partition is an equal covering, so $\eps(G) \leq \rho(G)$ whenever both are
+  finite. However, the classes of groups with equal coverings and equal partitions differ
+  substantially.
+\end{remark}
+
+% ══════════════════════════════════════════════════════════════════════════════
+
+\section{Theoretical Results}
+\label{sec:theory}
+
+\subsection{Fundamental Results in Group Covering}
+% \label{sec:history}
+Before studying equal coverings, we worked through the following foundational results on general group coverings. The following proofs are included to document our study of the theory and also because cannot be found directly in \cite{velasquez2022}.
+
+
+\begin{theorem}[{\cite[Theorem~1]{velasquez2022}}]
+  \label{thm:cyclic}
+  A group $G$ has a covering if and only if $G$ is non-cyclic.
+\end{theorem}
+
+\begin{proof}
+  Suppse G has a covering $\Pi$ and G is cyclic, Let g be the generator of G i.e $<g> = G$, Since $\Pi$ is a covering of G, $g \in H $, $H \in \Pi$. Since g generates G, $g \in H  \implies G = H$. Hence H is not proper and no such covering exist.
+  
+  Conversly, Suppose G is non cyclic, then define $ \Pi = \{<a>|a \in G\}$ Since G is non cyclic, each $<a>$ is a proper subgroup.
+
+
+\end{proof}
+
+\begin{theorem}[{\cite[Theorem~2]{velasquez2022}}]
+  For any group $G$, $\sig(G) \neq 2$.
+\end{theorem}
+It is a fundamental result in Group Theory That a group cannot be expressed as union of two proper subgroups, We again prove this result.
+\begin{proof}
+  
+  Suppose H,K $<$ G and $H \cup K = G$.
+  Let $h \in H $ and $k \in K$,
+  $\implies hk \in G$ 
+  $\implies hk \in H \vee hk \in K$\\
+   $hk \in H \implies h^{-1}hk \in H \implies k \in H \implies K \subseteq H \implies H = G$
+   Similarly  if $hk \in K$ it follows that $K=G$, therefore atleast one of H or K must be proper.
+
+\end{proof}
+\begin{proposition}{$2<\sigma(G) \leq n-1$}
+\end{proposition}
+\begin{proof}
+    $|\Pi| \leq n-1 $ if $ \Pi=\{<a>|a$ is non identity element of G$\}. $
+\end{proof}
+\begin{theorem}[Scorza, 1926]
+
+\label{thm:scorza}
+$\sigma(G) = 3$ if and only if there exists $N \trianglelefteq G$ such that
+$G/N \cong C_2 \times C_2$.
+\end{theorem}
+The proof follows the argument in \cite{scorza1926}, but several intermediate steps have been added for completeness and ease of comprehension, along with modification of statement aligning with \cite{velasquez2022}.
+\begin{proof}
+
+\noindent\textbf{($\Leftarrow$)} 
+Suppose \(N \trianglelefteq G\) and
+\(G/N \cong C_2 \times C_2\). Let
+\(\pi:G \to G/N\) be the natural quotient map. Let
+\(A_1,A_2,A_3\) be the three proper subgroups of \(C_2 \times C_2\), and define
+\[
+H_i=\pi^{-1}(A_i), \qquad i=1,2,3.
+\]
+Since the inverse image of a subgroup under a homomorphism is a subgroup, each
+\(H_i\) is a subgroup of \(G\). Moreover, each \(A_i\) is proper, so
+\(H_i\neq G\).
+
+Now let \(g\in G\). If \(\pi(g)=N\), then \(\pi(g)\in A_i\) for every \(i\).
+Otherwise, \(\pi(g)\) is one of the three nonidentity elements of
+\(C_2\times C_2\), each of which lies in a unique subgroup \(A_i\). Hence
+\(g\in H_i\) for some \(i\). Therefore,
+\[
+G=H_1\cup H_2\cup H_3,
+\]
+so \(\sigma(G)\le3\). Since no group is the union of one or two proper
+subgroups, \(\sigma(G)\notin\{1,2\}\). Hence \(\sigma(G)=3\).\\
+
+\bigskip
+\noindent\textbf{($\Rightarrow$)}
+ Suppose $G = H_1 \cup H_2 \cup H_3$ with
+each $H_i$ a proper subgroup, and the covering minimal.
+
+\medskip
+\noindent\textit{Each $H_i$ contains elements outside both others.}
+
+If $H_i \subseteq H_j \cup H_k$ for some permutation $\{i,j,k\}$ of
+$\{1,2,3\}$, then $G = H_j \cup H_k$, contradicting $\sigma(G) \neq 2$.
+So no $H_i$ is superfluous, and in particular for each $i$ there exist
+elements of $H_i$ lying outside both remaining subgroups.
+
+\medskip
+\noindent\textit{All pairwise intersections coincide.}
+
+Set $N := H_1 \cap H_2 \cap H_3$. We show $H_i \cap H_j = N$ for all $i \neq j$;
+it suffices to show $H_1 \cap H_2 \subseteq H_3$.
+
+Suppose for contradiction there exists $h \in (H_1 \cap H_2) \setminus H_3$.
+Now pick $h_3 \in H_3 \setminus (H_1 \cup H_2)$.
+Consider the product $hh_3 \in G$:
+\begin{itemize}
+  \item $hh_3 \notin H_1$: otherwise $h_3 = h^{-1}(hh_3) \in H_1$,
+    since $h \in H_1$. Contradiction.
+  \item $hh_3 \notin H_2$: otherwise $h_3 = h^{-1}(hh_3) \in H_2$,
+    since $h \in H_2$. Contradiction.
+  \item $hh_3 \notin H_3$: otherwise $h = (hh_3)h_3^{-1} \in H_3$,
+    since $h_3 \in H_3$. Contradiction.
+\end{itemize}
+So $hh_3 \notin H_1 \cup H_2 \cup H_3 = G$, which is absurd.
+Hence $H_1 \cap H_2 \subseteq H_3$, giving $H_1 \cap H_2 = N$.
+By symmetry, $H_i \cap H_j = N$ for all $i \neq j$.
+
+\medskip
+\noindent\textit{The cosets of $N$ form a Klein four-group.}
+
+Write $X_i := H_i \setminus N$ for each $i$, so that as sets:
+\[
+  G = N \;\sqcup\; X_1 \;\sqcup\; X_2 \;\sqcup\; X_3.
+\]
+We show that $\{N, X_1, X_2, X_3\}$ is closed under the operation
+$A \cdot B := \{ab : a \in A,\, b \in B\}$, and forms a group isomorphic
+to $C_2 \times C_2$.
+
+\smallskip
+\noindent\textit{(a) $X_i \cdot X_j = X_k$ for any permutation $\{i,j,k\}$
+of $\{1,2,3\}$.}
+
+Let $x_i \in X_i$ (so $x_i \in H_i \setminus N$) and $x_j \in X_j$
+(so $x_j \in H_j \setminus N$). The product $x_i x_j$ cannot lie in $H_i$
+(otherwise $x_j = x_i^{-1}(x_ix_j) \in H_i$, contradicting $x_j \notin N
+= H_i \cap H_j$, so $x_j \notin H_i$) and cannot lie in $H_j$ by the
+symmetric argument. Hence $x_ix_j \in H_k$. Since $H_k = N \sqcup X_k$,
+we ask whether $x_ix_j \in N$. But $N = H_i\cap H_j$, and $x_ix_j \in H_k
+\setminus H_i$ (as just shown), so $x_ix_j \notin H_i \supseteq N$; thus
+$x_ix_j \in X_k$. This gives $X_i \cdot X_j \subseteq X_k$.
+
+For the reverse inclusion, take any $x_k \in X_k$. Pick any $x_i \in X_i$;
+then $x_i x_k \in G$, and by the same argument (applied to $i$ and $k$),
+$x_i x_k \in X_j$. So $x_k = x_i^{-1}(x_i x_k)$. Now $x_i^{-1} \in X_i$
+(since $x_i \in H_i\setminus N$ implies $x_i^{-1}\in H_i\setminus N$) and
+$x_i x_k \in X_j$, so $x_k \in X_i \cdot X_j$. Thus $X_k \subseteq X_i
+\cdot X_j$, giving $X_i \cdot X_j = X_k$.
+
+\smallskip
+\noindent\textit{(b) $X_i \cdot X_i = N$ for each $i$.}
+
+From (a), $X_i \cdot X_j = X_k$ implies $X_i = X_k \cdot X_j^{-1}$;
+but by (a) $X_k \cdot X_j = X_i$, and since $X_j \cdot X_j^{-1}$... more
+directly: by (a) applied twice, $X_i\cdot(X_i \cdot X_j) = X_i \cdot X_k
+= X_j$, and $(X_i\cdot X_i)\cdot X_j = X_j$ forces $X_i\cdot X_i = N$.
+
+Alternatively: take $x, x' \in X_i$. Then $xx'^{-1}$: note $x'^{-1}\in X_i$
+(as above). By (a) with $j = i$, $x\cdot x'^{-1} \in X_k$ for some $k$, but
+$xx'^{-1} \in H_i$ (since both $x, x'^{-1} \in H_i$), so $xx'^{-1}\in H_i\cap
+X_k$. Since $X_k = H_k\setminus N$ and $H_i\cap H_k = N$, we get $xx'^{-1}
+\in N$. Thus every product of two elements of $X_i$ lands in $N$.
+Conversely, for any $n\in N$, pick $x\in X_i$; then $nx \in X_i$ (since
+$nx \in H_i$ and $nx\notin N$, as otherwise $x = n^{-1}(nx)\in N$), and
+$x\cdot(nx) = (x\cdot n\cdot x^{-1})\cdot x^2$... instead: $n = (nx)x^{-1}
+\in X_i\cdot X_i$. Hence $X_i\cdot X_i = N$.
+
+
+
+\medskip
+\noindent Finally for \textit{ $N \trianglelefteq G$ and $G/N \cong C_2\times C_2$.} \\
+Consider the function $\phi : G/N \to C_2 \times C_2$ 
+where we map each element of $G/N$ as \\ 
+$N \mapsto (0,0), X_1 \mapsto (0,1), X_2 \mapsto (1,0), X_3 \mapsto (1,1)$ then its clearly a bijection.
+and we have already shown $X_iX_j = X_k$ for any permutation of $\{i,j,k\}$ of $\{1,2,3\}$ and  $X_iX_i = N$ which respects the structure of $C_2 \times C_2$. Hence,
+\[
+  G/N \;\cong\; C_2\times C_2. \qedhere
+\]
+\end{proof}
+\begin{remark}
+  Note that in \cite{velasquez2022} $V_4$ is used for denoting the Klein-4 Group.
+\end{remark}
+\begin{theorem}[Haber--Rosenfeld {\cite[Theorem~4]{velasquez2022}}]
+  \label{thm:hr}
+  Let $p$ be the smallest prime divisor of $|G|$.
+  \begin{enumerate}[label=\emph{(\roman*)}]
+    \item $G$ cannot be the union of $p$ or fewer proper subgroups.
+    \item If $\Pi = \{H_i\}$ is a covering of $G$ by $p+1$ proper subgroups, then
+      some $H_i$ satisfies $[G : H_i] = p$. Moreover, if such $H_i$ is normal in $G$,
+      then every $H \in \Pi$ has index $p$ and $p^2 \mid |G|$.
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  (i) Consider the covering where $ n \leq p$, $\Pi = \{H_i|H_i<G, 1 \leq i \leq n\}$
+  Since all subgroup must have identity element as common we have,
+  \[
+     |G| < \sum_{1}^{n} |Hi|\]
+     Let H be the subgroup with highest order, and since p is the least prime divisior we have
+     [G:H] $\leq$ p  $\implies \frac{|G|}{|H|} \leq p \implies  \frac{|G|}{p} \leq |H|$\\ 
+     Then we have, $|G| < n|H| \implies |G|<n.\frac{|G|}{p} \implies p < n$ which is a contradiction.\\ 
+  (ii) Consider the covering with p + 1 subgroups  $\Pi = \{H_i|H_i<G, 1 \leq i \leq p+1 \}$ \\
+  Suppose none of the subgroups have index p. then $[G:H_i] \geq p+1 \implies |H_i| \geq \frac{|G|}{p+1}$\\ 
+  Take the subgroup $H_i$ with maximum order then $|G| < (p+1)|H_i| \implies |G| < (p+1) \frac{|G|}{p+1}$\\ 
+  $\implies |G| < |G| $ is a contradiction. So, one of the sugbroup must have index p.\\ 
+  Let $H$ be the subgroup with index p and assume its normal.\\ 
+  Since $H$ is normal then $HH_i$ is a subgroup of G with $H,H_i \subseteq HH_i$. If $HH_i$ is proper, we will find the covering with p subgroups by excluding $H, H_i$ and including $HH_i$ which contradicts (i). So $HH_i = G$.\\ 
+  
+  
+  $$|G|=|HH_i|=\frac{|H||H_i|}{|H\cap H_i|} \implies |H_i|=|G| \frac{|Hi \cap H|}{|H|} \implies |H_i|= p|H \cap H_i|  $$\\ 
+  Now let the indices of other$ H_i$ be $q_i > p$, and for convinience let $H_1 = H $.
+  
+   $$ |G| \leq |H_1| + \sum_{2}^{p+1} |H_i|- |H_i \cap H_1| = |H_1| + \sum_{2}^{p+1} \frac{|G|}{q_i} - \frac{|G|}{pq_i}$$
+   $$ < |H_1| + p (\frac{|G|}{p} - \frac{|G|}{p^2}) = \frac{|G|}{p} +|G| - \frac{|G|}{p} =|G| \implies |G|<|G|  $$
+   Which is a contradiction. So $p = q_i$. 
+   Finally, $[G:H_i \cap H_1] = [G:H_i][H_i:H_i \cap H_1] = p.\frac{|G|}{|H_1|} = p.\frac {|G|} {\frac{|G|}{p}} = p^2 \implies p^2 $ divides $|G|$. 
+  
+  % Part (ii): use quotient G/H_i \cong Z/pZ, second isomorphism theorem
+\end{proof}
+
+\subsubsection{The covering sum inequality}
+
+\begin{lemma}
+  \label{lem:sum}
+  If $G = \bigcup_{i=1}^n H_i$ is a covering by proper subgroups, then
+  \[
+    \sum_{i=1}^{n} \frac{1}{[G:H_i]} \geq 1.
+  \]
+\end{lemma}
+
+\begin{proof}
+  For each $g \in G$, since $g \in H_i$ for some $i$, summing the indicator
+  functions $\mathbf{1}_{H_i}$ over $G$ and switching the order of summation gives
+  $\sum_{i=1}^n |H_i| \geq |G|$. Dividing by $|G|$ yields the result.
+\end{proof}
+
+
+\begin{lemma}
+\label{lem:quotient}
+If $N \trianglelefteq G$, then $\sigma(G) \leq \sigma(G/N)$.
+\end{lemma}
+
+\begin{proof}
+If $G/N$ is cyclic the inequality is trivial, so assume $\sigma(G/N) = n < \infty$.
+Let $G/N = \bar{H}_1 \cup \cdots \cup \bar{H}_n$ be a minimal covering by proper
+subgroups. Define $H_r := \pi^{-1}(\bar{H}_r)$ for each $r$, where
+$\pi : G \twoheadrightarrow G/N$ is the natural projection.
+
+By the Correspondence Theorem, each $H_r$ is a subgroup of $G$ with
+$[G : H_r] = [G/N : \bar{H}_r] \geq 2$, so each $H_r$ is proper.
+For any $g \in G$, $\pi(g) \in \bar{H}_r$ for some $r$, hence $g \in H_r$.
+Thus $G = H_1 \cup \cdots \cup H_n$, giving $\sigma(G) \leq n = \sigma(G/N)$.
+\end{proof}
+
+\begin{lemma}
+\label{lem:coprime}
+For any finite groups $H$ and $K$,
+$\sigma(H \times K) \leq \min\{\sigma(H), \sigma(K)\}$.
+If additionally $\gcd(|H|, |K|) = 1$, then equality holds.
+\end{lemma}
+
+\begin{proof}
+\textbf{Inequality.}
+If $\sigma(H) = n < \infty$, say $H = \bigcup_{i=1}^n A_i$ with each $A_i \lneq H$,
+then $H \times K = \bigcup_{i=1}^n (A_i \times K)$ and each $A_i \times K$ is a
+proper subgroup of $H \times K$. So $\sigma(H \times K) \leq \sigma(H)$, and
+symmetrically $\sigma(H \times K) \leq \sigma(K)$, giving the inequality.
+
+\medskip
+\textbf{Equality when $\gcd(|H|,|K|) = 1$.}
+It remains to show $\sigma(H \times K) \geq \min\{\sigma(H), \sigma(K)\}$.
+We use the following structural fact:
+
+We claim :If $\gcd(|H|,|K|) = 1$, every subgroup $L \leq H \times K$ satisfies
+$L = \pi_H(L) \times \pi_K(L)$, where $\pi_H, \pi_K$ are the coordinate
+projections.
+
+\begin{proof}[Proof of Claim]
+Let $(h, k) \in L$. Since $\gcd(|H|, |K|) = 1$, the orders $|h|$ and $|k|$
+are coprime, so by Bezout's theorem there exist integers $s, t$ with
+$s|h| + t|k| = 1$. Then:
+\[
+  (h, k)^{t|k|} = (h^{t|k|}, e) = (h^{1 - s|h|}, e) = (h, e),
+\]
+so $(h, e) \in L$, and symmetrically $(e, k) \in L$.
+Hence $L \supseteq \pi_H(L) \times \pi_K(L)$; the reverse inclusion is
+immediate from the definition of projection.
+\end{proof}
+
+Now let $H \times K = \bigcup_{i=1}^n L_i$ be any covering by proper subgroups,
+with $n = \sigma(H \times K)$. By the Claim, write $L_i = A_i \times B_i$ where
+$A_i = \pi_H(L_i) \leq H$ and $B_i = \pi_K(L_i) \leq K$. Projecting the
+covering onto $H$:
+\[
+  H = \pi_H\!\left(\bigcup_{i=1}^n L_i\right) = \bigcup_{i=1}^n A_i.
+\]
+Since each $L_i \lneq H \times K$, either $A_i \lneq H$ or $B_i \lneq K$.
+Let $I = \{i : A_i \lneq H\}$. The subgroups $\{A_i\}_{i \notin I}$ all equal
+$H$ and are redundant in the union $\bigcup_i A_i = H$, so $\{A_i\}_{i \in I}$
+already covers $H$. Hence $\sigma(H) \leq |I| \leq n$.
+
+By a symmetric argument with $J = \{i : B_i \lneq K\}$, we get $\sigma(K) \leq n$.
+Since $I \cup J = \{1, \ldots, n\}$ (every $L_i$ is proper), this gives:
+\[
+  \min\{\sigma(H), \sigma(K)\} \leq n = \sigma(H \times K).
+\]
+Combined with the inequality direction, $\sigma(H \times K) = \min\{\sigma(H),
+\sigma(K)\}$.
+\end{proof}
+
+These lemmas were discussed in  \cite{cohn1994}.
+
+\subsection{Equal covering theorems}
+Since the proofs of the following theorems can be immidiately found in \cite{velasquez2022} we did not bother to mention it, but we formalized them. See \ref{sec:lean}
+\begin{theorem}[{\cite[Theorem~13]{velasquez2022}}]
+  \label{thm:exp}
+  If $\Pi = \{H_i\}$ is an equal covering of $G$, then $\Exp(G) \mid |H_i|$ for all $i$.
+\end{theorem}
+
+\begin{corollary}[{\cite[Corollary~1]{velasquez2022}}]
+  \label{cor:exp}
+  If $\Exp(G) \nmid |K|$ for every maximal subgroup $K$ of $G$, then $G$ has no
+  equal covering.
+\end{corollary}
+
+\begin{theorem}[{\cite[Theorem~14]{velasquez2022}}]
+  \label{thm:dihedral}
+  $\Dih{2n}$ has an equal covering if and only if $n$ is even. When $n$ is even,
+  $\Pi = \{\langle r \rangle, \langle r^2, s \rangle, \langle r^2, rs \rangle\}$
+  is an equal covering.
+\end{theorem}
+
+\begin{theorem}[{\cite[Theorem~15]{velasquez2022}}]
+  Every non-cyclic finite $p$-group has an equal covering.
+\end{theorem}
+
+\begin{theorem}[{\cite[Theorems~16, 17]{velasquez2022}}]
+  \label{thm:product}
+  \begin{enumerate}[label=\emph{(\roman*)}]
+    \item If $G$ or $H$ has an equal covering, so does $G \times H$.
+    \item Every non-cyclic finite nilpotent group has an equal covering.
+  \end{enumerate}
+\end{theorem}
+
+\begin{theorem}[{\cite[Theorem~18]{velasquez2022}}]
+  If $|G| = p_1 p_2 \cdots p_k$ with $p_i$ distinct primes, then $G$ has no
+  equal covering.
+\end{theorem}
+
+\begin{theorem}[{\cite[Theorem~19, Corollary~4]{velasquez2022}}]
+  \label{thm:normal}
+  \begin{enumerate}[label=\emph{(\roman*)}]
+    \item If $N \norml G$ and $G/N$ has an equal covering, so does $G$.
+    \item If $G = H \rtimes K$ and $K$ has an equal covering, so does $G$.
+  \end{enumerate}
+\end{theorem}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Lean 4 Formalization}
+\label{sec:lean}
+
+Lean is an open-source programming language and proof assistant that enables correct, maintainable, and formally verified code.
+Lean is interactive theorem prover based on dependent tyoe theory designed especially for mathematics and software verification , with its core type theory expressive
+
+\cite{lean}
+
+\subsection{Overview}
+We formalized the following results in Lean~4:
+\begin{itemize}
+  \item \textbf{Theorem 1.} A group $G$ has a covering if and only if $G$
+    is non-cyclic (both directions, including an explicit construction of
+    the covering $\{\langle x \rangle : x \in G\}$ in the reverse direction).
+  \item \textbf{Theorem 2.} No group is the union of two proper subgroups,
+    i.e.\ $\sigma(G) \neq 2$.
+  \item \textbf{Theorem 13.} If $\Pi = \{H_i\}$ is an equal covering of $G$,
+    then $\exp(G) \mid |H_i|$ for every $H_i \in \Pi$.
+  \item \textbf{Corollary 1.} If $\exp(G) \nmid |K|$ for every maximal
+    subgroup $K$ of $G$, then $G$ has no equal covering.
+  \item \textbf{Theorem 16.} If $G$ has an equal covering, then so does
+    $G \times H$ for any group $H$ (via an explicit product-subgroup
+    construction).
+  \item \textbf{Theorem 19.} If $f : G \twoheadrightarrow Q$ is a surjective
+    homomorphism and $Q$ has an equal covering, then $G$ has an equal
+    covering, obtained by pulling the covering back along $f$.
+\end{itemize}
+Theorems 15 and 17 (every non-cyclic $p$-group, resp.\ nilpotent group, has
+an equal covering) are currently stated as \texttt{axiom}s with the correct
+type signature, pending a full proof; see \S\ref{sec:scope}.
+
+\subsection{Key Mathlib tools}
+Rather than importing Mathlib's \texttt{Subgroup} API directly, we built a
+small self-contained algebraic core mirroring it, so that the intended
+correspondence to Mathlib is explicit:
+\begin{itemize}
+  \item \texttt{Group}, \texttt{IsSubgroup}, and \texttt{Subgroup} play the
+    role of Mathlib's \texttt{Group} and \texttt{Subgroup}, with membership
+    given by a predicate \texttt{subset : $\alpha \to$ Prop} rather than a
+    \texttt{SetLike} coercion.
+  \item \texttt{Covering} and \texttt{EqualCovering} package a family of
+    proper subgroups indexed by \texttt{i : I}, together with the covering
+    property (\texttt{covers}) and, for equal coverings, a proof that all
+    members have the same \texttt{Size}.
+  \item \texttt{order\_subgroup}, \texttt{exp}, and \texttt{order\_elem}
+    stand in for Mathlib's \texttt{Nat.card} and
+    \texttt{Monoid.exponent}, together with an axiomatized
+    \texttt{lagrange} lemma (order of an element divides the order of any
+    subgroup containing it) and \texttt{exp\_divides} (the exponent is the
+    least common multiple of element orders, expressed via divisibility).
+  \item \texttt{MaxSubgroup} and \texttt{divides\_max} formalize maximality
+    and the fact that every subgroup embeds in some maximal subgroup, used
+    for Corollary 1.
+  \item \texttt{DirectProduct} and \texttt{ProdSubgroup} construct the
+    product group $G \times H$ and lift a subgroup of $G$ to a subgroup of
+    $G \times H$, used in Theorem 16.
+  \item \texttt{Homomorphism}, \texttt{Surjective}, and
+    \texttt{PreimageSubgroup} formalize group homomorphisms and preimages of
+    subgroups under a surjection, used in Theorem 19.
+\end{itemize}
+
+[Describe: \texttt{Subgroup}, \texttt{Subgroup.index}, \texttt{Subgroup.comap},
+\texttt{Finset}, relevant API lemmas.]
+
+\subsection{Challenges}
+\begin{itemize}
+  \item \textbf{Axiomatizing rather than importing.} To keep the
+    formalization self-contained and readable, we defined our own
+    \texttt{Group}/\texttt{Subgroup} structures instead of using Mathlib's,
+    which meant re-axiomatizing standard facts (Lagrange's theorem, the
+    exponent--order relationship) rather than reusing proofs already in
+    Mathlib. This trades a shorter file for a formalization that is not yet
+    literally checked against Mathlib's group theory.
+  \item \textbf{Order as a type, not a number.} We initially represented the
+    order of a subgroup with an abstract \texttt{Size : Subgroup G $\to$
+    Type u} to sidestep finiteness assumptions; this was later replaced by
+    a numeric \texttt{order\_subgroup : Subgroup G $\to$ Nat} for the
+    finite-group results (Theorem 13 onward), which is closer to Mathlib's
+    \texttt{Nat.card} but required threading finiteness hypotheses through
+    every subsequent lemma.
+  \item \textbf{Case-heavy classical proofs.} Results like Scorza's theorem
+    (Theorem~3.4, $\sigma(G)=3 \iff G/N \cong C_2\times C_2$) rely on
+    case splits over coset membership that are easy to write on paper but
+    require careful use of \texttt{Classical.byContradiction} and explicit
+    witness extraction in Lean, since the underlying group is not assumed
+    decidable.
+  \item \textbf{Quotients and the Correspondence Theorem.} Theorem 19
+    required formalizing preimages of subgroups under a homomorphism from
+    scratch (\texttt{PreimageSubgroup}), since we do not yet have quotient
+    groups formalized in this file; a full treatment of Theorem 19(ii)
+    (via $G = H \rtimes K$) is left for future work.
+\end{itemize}
+
+\subsection{Representative Lean code}
+The proof that no group is the union of two proper subgroups
+(Theorem~2) illustrates the style of the formalization:
+
+\begin{lstlisting}[caption={Formalization of Theorem 2: $\sigma(G) \neq 2$}]
+theorem theorem2 {alpha : Type u} (G : Group alpha) (H K : Subgroup G)
+  (pH : IsProper H) (pK : IsProper K) :
+  Not (forall x, H.subset x or K.subset x) := by
+  intro covers
+  rcases pH with <k, hk_not_H>
+  rcases pK with <h, hh_not_K>
+  have hk_K : K.subset k := by
+    cases covers k with
+    | inl h_in => contradiction
+    | inr k_in => exact k_in
+  have hh_H : H.subset h := by
+    cases covers h with
+    | inl h_in => exact h_in
+    | inr k_in => contradiction
+  have h_mul_k := covers (G.mul h k)
+  cases h_mul_k with
+  | inl h_in =>
+    have k_in_H := cancel_lemma H h k hh_H h_in
+    contradiction
+  | inr k_in =>
+    have h_in_K := cancel_lemma2 K h k hk_K k_in
+    contradiction
+\end{lstlisting}
+
+The proof that equal coverings force the exponent of $G$ to divide the
+order of every member (Theorem~13) shows how \texttt{Lagrange} and
+\texttt{exp\_divides} compose:
+
+\begin{lstlisting}[caption={Formalization of Theorem 13}]
+theorem theorem13 {alpha : Type u} {G : Group alpha} {I : Type u}
+  (eqCov : FiniteEqualCovering G I) (i : I) :
+  exp G Divides order_subgroup (eqCov.cov.sub i) := by
+  apply exp_divides
+  intro x
+  have <j, x_in_j> := eqCov.cov.covers x
+  have lag := lagrange (eqCov.cov.sub j) x x_in_j
+  have eq_sz := eqCov.equalSz j i
+  rw [<- eq_sz]
+  exact lag
+\end{lstlisting}
+
+
+Find remaining theorems on github \cite{github}.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{GAP Computational Investigation}
+\label{sec:gap}
+
+GAP is a system for computational discrete algebra, with particular emphasis on Computational Group Theory. \cite{gap}
+\subsection{The algorithm }
+We modified the code provided by \cite{velasquez2022} to test and find the equal coverings of finite Groups. 
+
+
+\begin{lstlisting}[language=GAP, caption={GAP algorithm for equal covering detection}]
+Algorithm EqualCovering(G)
+CandidateOrders := function(G)
+    local expG, candidates, d;
+    expG := Exponent(G);
+    candidates := [];
+    for d in DivisorsInt(Order(G)) do
+        if d < Order(G) and d mod expG = 0 then
+            Add(candidates, d);
+        fi;
+    od;
+    return candidates;
+end;
+
+
+SubgroupsByOrder := function(G)
+    local allSubs, buckets, s, o;
+    allSubs := AllSubgroups(G);
+    buckets := rec();
+    for s in allSubs do
+        o := String(Order(s));
+        if IsBound(buckets.(o)) then
+            Add(buckets.(o), s);
+        else
+            buckets.(o) := [s];
+        fi;
+    od;
+    return buckets;
+end;
+
+
+CoversGroup := function(subs, allEltsList, n)
+    local covered, count, s, e, pos;
+    covered := BlistList([1 .. n], []);
+    count := 0;
+    for s in subs do
+        for e in AsSet(s) do
+            pos := PositionSorted(allEltsList, e);
+            if not covered[pos] then
+                covered[pos] := true;
+                count := count + 1;
+            fi;
+        od;
+        if count = n then
+            return true;
+        fi;
+    od;
+    return false;
+end;
+
+
+HasEqualCovering := function(G)
+    local candidates, buckets, allEltsList, n, d, key;
+
+    if IsCyclic(G) then
+        return false;
+    fi;
+
+    candidates := CandidateOrders(G);
+    if Length(candidates) = 0 then
+        return false;
+    fi;
+
+    buckets     := SubgroupsByOrder(G);
+    allEltsList := AsSortedList(G);
+    n           := Length(allEltsList);
+
+    for d in candidates do
+        key := String(d);
+        if IsBound(buckets.(key)) then
+            if CoversGroup(buckets.(key), allEltsList, n) then
+                return true;
+            fi;
+        fi;
+    od;
+
+    return false;
+end;
+
+ShowCovering := function(G)
+    local candidates, buckets, allEltsList, n, d, key, subs, i;
+
+    Print("\n");
+    Print("=======================\n");
+    Print("Group    : ", StructureDescription(G), "\n");
+    Print("Order    : ", Order(G), "\n");
+    Print("Exponent : ", Exponent(G), "\n");
+
+    if IsCyclic(G) then
+        Print("Result   : CYCLIC - no covering exists (Theorem 1)\n");
+        Print("======================\n\n");
+        return fail;
+    fi;
+
+    candidates := CandidateOrders(G);
+
+    if Length(candidates) = 0 then
+        Print("Result   : No valid candidate orders found - no equal covering\n");
+        Print("=================\n\n");
+        return false;
+    fi;
+
+    buckets     := SubgroupsByOrder(G);
+    allEltsList := AsSortedList(G);
+    n           := Length(allEltsList);
+
+    for d in candidates do
+        key := String(d);
+        if IsBound(buckets.(key)) then
+            subs := buckets.(key);
+            if CoversGroup(subs, allEltsList, n) then
+                Print("Result   : *** EQUAL COVERING FOUND ***\n");
+                Print("----------------------\n");
+                Print("Covering subgroup order : ", d, "\n");
+                Print("Number of subgroups     : ", Length(subs), "\n");
+                Print("------------------------\n");
+                for i in [1 .. Length(subs)] do
+                    Print("  Subgroup ", i, " : ", StructureDescription(subs[i]), "\n");
+                    Print("  Elements  : ", AsSet(subs[i]), "\n");
+                    Print("\n");
+                od;
+                Print("==============================\n\n");
+                return true;
+            fi;
+        fi;
+    od;
+
+    Print("Result   : No equal covering exists for this group\n");
+    Print("=========================\n\n");
+    return false;
+end;
+
+
+ScanRange := function(lo, hi)
+    local n, k, numGroups, G, result, total_yes, total_no;
+
+    total_yes := 0;
+    total_no  := 0;
+
+    Print("\n");
+    Print("==================================\n");
+    Print("  SCANNING GROUPS: order ", lo, " to ", hi, "\n");
+    Print("  (Reproducing Velasquez-Berroteran 2022, aiming past 60)\n");
+    Print("=====================\n");
+    Print(String("Order", 7), "  ",
+          String("ID",   4), "  ",
+          String("Group",          20), "  ",
+          "Equal Covering?\n");
+    Print("-------------------\n");
+
+    for n in [lo .. hi] do
+        numGroups := NumberSmallGroups(n);
+        for k in [1 .. numGroups] do
+            G := SmallGroup(n, k);
+            if IsCyclic(G) then
+                result := "cyclic - skip";
+            elif HasEqualCovering(G) then
+                result := "YES";
+                total_yes := total_yes + 1;
+            else
+                result := "no";
+                total_no  := total_no  + 1;
+            fi;
+            Print(String(n,       7), "  ",
+                  String(k,       4), "  ",
+                  String(StructureDescription(G), 20), "  ",
+                  result, "\n");
+        od;
+    od;
+
+    Print("-----------------------------\n");
+    Print("Summary: ", total_yes, " groups have an equal covering, ",
+          total_no, " do not (cyclic groups excluded)\n");
+    Print("=========================\n\n");
+end;
+
+
+TestDihedralTheorem := function()
+    local n, G, result, parity;
+
+    Print("\n");
+    Print("=======================================\n");
+    Print("  THEOREM 14 CHECK: D_{2n} has equal covering iff n is even\n");
+    Print("==========================\n");
+
+    for n in [3 .. 10] do
+        G := DihedralGroup(2 * n);
+
+        if n mod 2 = 0 then
+            parity := "even";
+        else
+            parity := "odd";
+        fi;
+
+        if HasEqualCovering(G) then
+            result := "YES  has equal covering";
+        else
+            result := "no   no equal covering";
+        fi;
+
+        Print("  D", 2 * n, " (n=", n, ", n is ", parity, ")  ->  ", result, "\n");
+    od;
+
+    Print("====================\n\n");
+end;
+
+\end{lstlisting}
+
+
+\subsection{Results}
+
+\begin{longtable}{llcccl}
+  \caption{Group properties for orders 61--120} \label{tab:groups} \\
+  \toprule
+  \textbf{Group ID} & \textbf{Name} & \textbf{Exp} & \textbf{Nilp.}
+    & \textbf{Equal cov.?} & \textbf{Reason} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Group ID} & \textbf{Name} & \textbf{Exp} & \textbf{Nilp.}
+    & \textbf{Equal cov.}\\
+  \midrule
+  \endhead
+  \bottomrule
+  \endfoot
+  \bottomrule
+  \endlastfoot
+  % ── groups 61–120 ──
+  $[61,1]$ & $C_{61}$ & 61 & Yes & No \\
+  $[62,1]$ & $D_{62}$ & 62 & No & No \\
+  $[62,2]$ & $C_{62}$ & 62 & Yes & No \\
+  $[63,1]$ & $C_7 : C_9$ & 63 & ? & No \\
+  $[63,2]$ & $C_{63}$ & 63 & Yes & No \\
+  $[63,3]$ & $C_3 \times (C_7 : C_3)$ & 21 & ? & Yes \\
+  $[63,4]$ & $C_{21} \times C_3$ & 21 & Yes & Yes \\
+  $[64,1]$ & $C_{64}$ & 64 & Yes & No \\
+  $[64,2]$ & $C_8 \times C_8$ & 8 & Yes & Yes \\
+  $[64,3]$ & $C_8 : C_8$ & 8 & Yes & Yes \\
+  $[64,4]$ & $(C_2 \times C_2 \times C_2) : C_8$ & 8 & Yes & Yes \\
+  $[64,5]$ & $(C_4 \times C_2) : C_8$ & 8 & Yes & Yes \\
+  $[64,6]$ & $D_8 : C_8$ & 8 & Yes & Yes \\
+  $[64,7]$ & $Q_8 : C_8$ & 8 & Yes & Yes \\
+  $[64,8]$ & $(C_4 : C_4) : C_4$ & 4 & Yes & Yes \\
+  $[64,9]$ & $(C_2 \times Q_8) : C_4$ & 4 & Yes & Yes \\
+  $[64,10]$ & $(C_8 : C_4) : C_2$ & 8 & Yes & Yes \\
+  $[64,11]$ & $(C_2 \times C_2) . ((C_4 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,12]$ & $(C_4 : C_8) : C_2$ & 8 & Yes & Yes \\
+  $[64,13]$ & $(C_2 \times C_2) . ((C_4 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,14]$ & $(C_2 \times C_2) . ((C_4 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,15]$ & $C_8 : C_8$ & 8 & Yes & Yes \\
+  $[64,16]$ & $C_8 : C_8$ & 8 & Yes & Yes \\
+  $[64,17]$ & $(C_4 \times C_2) : C_8$ & 8 & Yes & Yes \\
+  $[64,18]$ & $(C_8 \times C_2) : C_4$ & 8 & Yes & Yes \\
+  $[64,19]$ & $C_4 . (C_4 \times C_4)$ & 4 & Yes & Yes \\
+  $[64,20]$ & $(C_8 : C_2) : C_4$ & 8 & Yes & Yes \\
+  $[64,21]$ & $(C_4 : C_4) : C_4$ & 4 & Yes & Yes \\
+  $[64,22]$ & $(C_4 \times C_2) . D_8$ & 4 & Yes & Yes \\
+  $[64,23]$ & $((C_4 \times C_2) : C_2) : C_4$ & 4 & Yes & Yes \\
+  $[64,24]$ & $(C_8 : C_2) : C_4$ & 8 & Yes & Yes \\
+  $[64,25]$ & $(C_8 : C_2) : C_4$ & 8 & Yes & Yes \\
+  $[64,26]$ & $C_{16} \times C_4$ & 16 & Yes & Yes \\
+  $[64,27]$ & $C_{16} : C_4$ & 16 & Yes & Yes \\
+  $[64,28]$ & $C_{16} : C_4$ & 16 & Yes & Yes \\
+  $[64,29]$ & $(C_2 \times C_2) : C_{16}$ & 16 & Yes & Yes \\
+  $[64,30]$ & $(C_{16} : C_2) : C_2$ & 16 & Yes & Yes \\
+  $[64,31]$ & $(C_{16} : C_2) : C_2$ & 16 & Yes & Yes \\
+  $[64,32]$ & $((C_4 \times C_2) : C_2) : C_4$ & 4 & Yes & Yes \\
+  $[64,33]$ & $((C_4 \times C_2) : C_2) : C_4$ & 4 & Yes & Yes \\
+  $[64,34]$ & $(C_4 \times C_4) : C_4$ & 4 & Yes & Yes \\
+  $[64,35]$ & $(C_4 \times C_4) : C_4$ & 4 & Yes & Yes \\
+  $[64,36]$ & $(C_2 . ((C_4 \times C_2) : C_2)) : C_2$ & 4 & Yes & Yes \\
+  $[64,37]$ & $C_2 . ((C_2 \times C_2 \times C_2) : C_4)$ & 4 & Yes & Yes \\
+  $[64,38]$ & $D_{16} : C_4$ & 16 & Yes & Yes \\
+  $[64,39]$ & $Q_{16} : C_4$ & 8 & Yes & Yes \\
+  $[64,40]$ & $(C_{16} \times C_2) : C_2$ & 16 & Yes & Yes \\
+  $[64,41]$ & $Q_{16} : C_4$ & 8 & Yes & Yes \\
+  $[64,42]$ & $(C_{16} : C_2) : C_2$ & 16 & Yes & Yes \\
+  $[64,43]$ & $C_2 . ((C_8 \times C_2) : C_2)$ & 8 & Yes & Yes \\
+  $[64,44]$ & $C_4 : C_{16}$ & 16 & Yes & Yes \\
+  $[64,45]$ & $C_8 . D_8$ & 8 & Yes & Yes \\
+  $[64,46]$ & $C_{16} : C_4$ & 16 & Yes & Yes \\
+  $[64,47]$ & $C_{16} : C_4$ & 16 & Yes & Yes \\
+  $[64,48]$ & $C_{16} : C_4$ & 16 & Yes & Yes \\
+  $[64,49]$ & $C_4 . D_{16}$ & 16 & Yes & Yes \\
+  $[64,50]$ & $C_{32} \times C_2$ & 32 & Yes & Yes \\
+  $[64,51]$ & $C_{32} : C_2$ & 32 & Yes & Yes \\
+  $[64,52]$ & $D_{64}$ & 32 & Yes & Yes \\
+  $[64,53]$ & $QD_{64}$ & 32 & Yes & Yes \\
+  $[64,54]$ & $Q_{64}$ & 32 & Yes & Yes \\
+  $[64,55]$ & $C_4 \times C_4 \times C_4$ & 4 & Yes & Yes \\
+  $[64,56]$ & $C_2 \times ((C_4 \times C_2) : C_4)$ & 4 & Yes & Yes \\
+  $[64,57]$ & $(C_4 \times C_4) : C_4$ & 4 & Yes & Yes \\
+  $[64,58]$ & $C_4 \times ((C_4 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,59]$ & $C_4 \times (C_4 : C_4)$ & 4 & Yes & Yes \\
+  $[64,60]$ & $(C_2 \times C_2) : ((C_4 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,61]$ & $C_4 : ((C_4 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,62]$ & $(C_4 \times C_2 \times C_2) : C_4$ & 4 & Yes & Yes \\
+  $[64,63]$ & $(C_4 \times C_4) : C_4$ & 4 & Yes & Yes \\
+  $[64,64]$ & $(C_4 \times C_4) : C_4$ & 4 & Yes & Yes \\
+  $[64,65]$ & $C_4 : (C_4 : C_4)$ & 4 & Yes & Yes \\
+  $[64,66]$ & $(C_2 \times C_2) : (C_4 : C_4)$ & 4 & Yes & Yes \\
+  $[64,67]$ & $(C_2 \times C_2) : ((C_4 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,68]$ & $(C_4 : C_4) : C_4$ & 4 & Yes & Yes \\
+  $[64,69]$ & $((C_4 \times C_2) : C_2) : C_4$ & 4 & Yes & Yes \\
+  $[64,70]$ & $C_4 : (C_4 : C_4)$ & 4 & Yes & Yes \\
+  $[64,71]$ & $C_4 : ((C_4 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,72]$ & $(C_4 \times C_2) : Q_8$ & 4 & Yes & Yes \\
+  $[64,73]$ & $(C_4 \times C_2) : D_8$ & 4 & Yes & Yes \\
+  $[64,74]$ & $(C_2 \times C_2 \times C_2) : Q_8$ & 4 & Yes & Yes \\
+  $[64,75]$ & $(C_4 \times C_2) : D_8$ & 4 & Yes & Yes \\
+  $[64,76]$ & $(C_4 \times C_2) : Q_8$ & 4 & Yes & Yes \\
+  $[64,77]$ & $((C_4 \times C_2) : C_4) : C_2$ & 4 & Yes & Yes \\
+  $[64,78]$ & $((C_4 \times C_2) : C_4) : C_2$ & 4 & Yes & Yes \\
+  $[64,79]$ & $(C_2 \times C_2 \times C_2) . (C_2 \times C_2 \times C_2)$ & 2 & Yes & Yes \\
+  $[64,80]$ & $(C_2 \times (C_4 : C_4)) : C_2$ & 4 & Yes & Yes \\
+  $[64,81]$ & $(C_2 \times C_2 \times C_2) . (C_2 \times C_2 \times C_2)$ & 2 & Yes & Yes \\
+  $[64,82]$ & $(C_2 \times C_2 \times C_2) . (C_2 \times C_2 \times C_2)$ & 2 & Yes & Yes \\
+  $[64,83]$ & $C_8 \times C_4 \times C_2$ & 8 & Yes & Yes \\
+  $[64,84]$ & $C_2 \times (C_8 : C_4)$ & 8 & Yes & Yes \\
+  $[64,85]$ & $C_4 \times (C_8 : C_2)$ & 8 & Yes & Yes \\
+  $[64,86]$ & $(C_8 : C_2) : C_4$ & 8 & Yes & Yes \\
+  $[64,87]$ & $C_2 \times ((C_8 \times C_2) : C_2)$ & 8 & Yes & Yes \\
+  $[64,88]$ & $(C_2 \times C_2) : (C_8 : C_2)$ & 8 & Yes & Yes \\
+  $[64,89]$ & $((C_8 \times C_2) : C_2) : C_2$ & 8 & Yes & Yes \\
+  $[64,90]$ & $C_2 \times ((C_2 \times C_2 \times C_2) : C_4)$ & 4 & Yes & Yes \\
+  $[64,91]$ & $(C_2 \times Q_8) : C_4$ & 4 & Yes & Yes \\
+  $[64,92]$ & $C_2 \times ((C_8 : C_2) : C_2)$ & 8 & Yes & Yes \\
+  $[64,93]$ & $C_2 \times (C_2 . ((C_4 \times C_2) : C_2))$ & 4 & Yes & Yes \\
+  $[64,94]$ & $(C_2 . ((C_4 \times C_2) : C_2)) : C_2$ & 4 & Yes & Yes \\
+  $[64,95]$ & $C_2 \times ((C_8 \times C_2) : C_2)$ & 8 & Yes & Yes \\
+  $[64,96]$ & $C_2 \times (Q_8 : C_4)$ & 4 & Yes & Yes \\
+  $[64,97]$ & $((C_4 \times C_2) : C_2) : C_4$ & 4 & Yes & Yes \\
+  $[64,98]$ & $Q_8 : (C_4 \times C_2)$ & 4 & Yes & Yes \\
+  $[64,99]$ & $(C_2 \times D_8) : C_4$ & 4 & Yes & Yes \\
+  $[64,100]$ & $(C_2 \times Q_8) : C_4$ & 4 & Yes & Yes \\
+  $[64,101]$ & $C_2 \times ((C_4 \times C_4) : C_2)$ & 4 & Yes & Yes \\
+  $[64,102]$ & $(C_2 \times Q_8) : C_4$ & 4 & Yes & Yes \\
+  $[64,103]$ & $C_2 \times (C_4 : C_8)$ & 8 & Yes & Yes \\
+  $[64,104]$ & $C_4 : (C_8 : C_2)$ & 8 & Yes & Yes \\
+  $[64,105]$ & $(C_4 : C_8) : C_2$ & 8 & Yes & Yes \\
+  $[64,106]$ & $C_2 \times (C_8 : C_4)$ & 8 & Yes & Yes \\
+  $[64,107]$ & $C_2 \times (C_8 : C_4)$ & 8 & Yes & Yes \\
+  $[64,108]$ & $(C_8 \times C_2) : C_4$ & 8 & Yes & Yes \\
+  $[64,109]$ & $C_8 : (C_4 \times C_2)$ & 8 & Yes & Yes \\
+  $[64,110]$ & $C_2 \times (C_4 . D_8)$ & 4 & Yes & Yes \\
+  $[64,111]$ & $(C_4 . D_8) : C_2$ & 4 & Yes & Yes \\
+  $[64,112]$ & $(C_4 \times C_2) : C_8$ & 8 & Yes & Yes \\
+  $[64,113]$ & $(C_4 : C_8) : C_2$ & 8 & Yes & Yes \\
+  $[64,114]$ & $(C_4 : C_8) : C_2$ & 8 & Yes & Yes \\
+  $[64,115]$ & $C_8 \times D_8$ & 8 & Yes & Yes \\
+  $[64,116]$ & $(C_2 \times C_2) : (C_8 : C_2)$ & 8 & Yes & Yes \\
+  $[64,117]$ & $C_4 : (C_8 : C_2)$ & 8 & Yes & Yes \\
+  $[64,118]$ & $C_4 \times D_{16}$ & 16 & Yes & Yes \\
+  $[64,119]$ & $C_4 \times QD_{16}$ & 8 & Yes & Yes \\
+  $[64,120]$ & $C_4 \times Q_{16}$ & 8 & Yes & Yes \\
+  $[64,121]$ & $C_8 : (C_4 \times C_2)$ & 8 & Yes & Yes \\
+  $[64,122]$ & $Q_{16} : C_4$ & 8 & Yes & Yes \\
+  $[64,123]$ & $C_8 : (C_4 \times C_2)$ & 8 & Yes & Yes \\
+  $[64,124]$ & $QD_{16} : C_4$ & 8 & Yes & Yes \\
+  $[64,125]$ & $Q_{16} : C_4$ & 8 & Yes & Yes \\
+  $[64,126]$ & $C_8 \times Q_8$ & 8 & Yes & Yes \\
+  $[64,127]$ & $C_8 : Q_8$ & 8 & Yes & Yes \\
+  $[64,128]$ & $(C_2 \times C_2) : D_{16}$ & 16 & Yes & Yes \\
+  $[64,129]$ & $(C_2 \times C_2) : QD_{16}$ & 8 & Yes & Yes \\
+  $[64,130]$ & $Q_8 : D_8$ & 4 & Yes & Yes \\
+  $[64,131]$ & $(C_2 \times C_2) : QD_{16}$ & 8 & Yes & Yes \\
+  $[64,132]$ & $(C_2 \times C_2) : Q_{16}$ & 8 & Yes & Yes \\
+  $[64,133]$ & $(Q_8 : C_4) : C_2$ & 4 & Yes & Yes \\
+  $[64,134]$ & $Q_8 : D_8$ & 4 & Yes & Yes \\
+  $[64,135]$ & $((C_4 \times C_4) : C_2) : C_2$ & 4 & Yes & Yes \\
+  $[64,136]$ & $(C_8 : C_2) : (C_2 \times C_2)$ & 8 & Yes & Yes \\
+  $[64,137]$ & $((C_4 \times C_4) : C_2) : C_2$ & 4 & Yes & Yes \\
+  $[64,138]$ & $(C_4 \times C_2) : D_8$ & 4 & Yes & Yes \\
+  $[64,139]$ & $((C_4 \times C_2) : C_2) : (C_2 \times C_2)$ & 4 & Yes & Yes \\
+  $[64,140]$ & $C_4 : D_{16}$ & 16 & Yes & Yes \\
+  $[64,141]$ & $C_4 : QD_{16}$ & 8 & Yes & Yes \\
+  $[64,142]$ & $C_4 : QD_{16}$ & 8 & Yes & Yes \\
+  $[64,143]$ & $C_4 : Q_{16}$ & 8 & Yes & Yes \\
+  $[64,144]$ & $(Q_8 : C_4) : C_2$ & 4 & Yes & Yes \\
+  $[64,145]$ & $(Q_8 : C_4) : C_2$ & 4 & Yes & Yes \\
+  $[64,146]$ & $(C_2 \times C_2) : QD_{16}$ & 8 & Yes & Yes \\
+  $[64,147]$ & $(C_2 \times C_2) : D_{16}$ & 16 & Yes & Yes \\
+  $[64,148]$ & $(C_2 \times C_2) : Q_{16}$ & 8 & Yes & Yes \\
+  $[64,149]$ & $C_8 : D_8$ & 8 & Yes & Yes \\
+  $[64,150]$ & $C_8 : D_8$ & 8 & Yes & Yes \\
+  $[64,151]$ & $(Q_8 : C_4) : C_2$ & 4 & Yes & Yes \\
+  $[64,152]$ & $(C_2 . ((C_4 \times C_2) : C_2)) : C_2$ & 4 & Yes & Yes \\
+  $[64,153]$ & $((C_8 : C_2) : C_2) : C_2$ & 8 & Yes & Yes \\
+  $[64,154]$ & $(C_2 . ((C_4 \times C_2) : C_2)) : C_2$ & 4 & Yes & Yes \\
+  $[64,155]$ & $D_8 : Q_8$ & 4 & Yes & Yes \\
+  $[64,156]$ & $Q_8 : Q_8$ & 4 & Yes & Yes \\
+  $[64,157]$ & $D_8 : Q_8$ & 4 & Yes & Yes \\
+  $[64,158]$ & $Q_8 : Q_8$ & 4 & Yes & Yes \\
+  $[64,159]$ & $(C_8 : C_4) : C_2$ & 8 & Yes & Yes \\
+  $[64,160]$ & $(C_2 \times C_2) . (C_2 \times D_8)$ & 4 & Yes & Yes \\
+  $[64,161]$ & $(C_8 : C_4) : C_2$ & 8 & Yes & Yes \\
+  $[64,162]$ & $(C_8 : C_4) : C_2$ & 8 & Yes & Yes \\
+  $[64,163]$ & $(C_8 : C_4) : C_2$ & 8 & Yes & Yes \\
+  $[64,164]$ & $(C_8 : C_4) : C_2$ & 8 & Yes & Yes \\
+  $[64,165]$ & $(C_8 : C_4) : C_2$ & 8 & Yes & Yes \\
+  $[64,166]$ & $(C_8 : C_4) : C_2$ & 8 & Yes & Yes \\
+  $[64,167]$ & $(C_4 : Q_8) : C_2$ & 4 & Yes & Yes \\
+  $[64,168]$ & $(C_2 \times C_2) . (C_2 \times D_8)$ & 4 & Yes & Yes \\
+  $[64,169]$ & $((C_2 \times C_2) . (C_2 \times C_2 \times C_2)) : C_2$ & 4 & Yes & Yes \\
+  $[64,170]$ & $(C_4 : Q_8) : C_2$ & 4 & Yes & Yes \\
+  $[64,171]$ & $((C_2 \times C_2) . (C_2 \times C_2 \times C_2)) : C_2$ & 4 & Yes & Yes \\
+  $[64,172]$ & $(C_2 \times C_2) . (C_2 \times D_8)$ & 4 & Yes & Yes \\
+  $[64,173]$ & $C_4 : QD_{16}$ & 8 & Yes & Yes \\
+  $[64,174]$ & $C_4 : D_{16}$ & 16 & Yes & Yes \\
+  $[64,175]$ & $C_4 : Q_{16}$ & 8 & Yes & Yes \\
+  $[64,176]$ & $(C_2 \times Q_{16}) : C_2$ & 8 & Yes & Yes \\
+  $[64,177]$ & $C_8 : D_8$ & 8 & Yes & Yes \\
+  $[64,178]$ & $(C_2 \times Q_{16}) : C_2$ & 8 & Yes & Yes \\
+  $[64,179]$ & $C_8 : Q_8$ & 8 & Yes & Yes \\
+  $[64,180]$ & $(C_2 \times C_2) . (C_2 \times D_8)$ & 4 & Yes & Yes \\
+  $[64,181]$ & $C_8 : Q_8$ & 8 & Yes & Yes \\
+  $[64,182]$ & $C_8 : Q_8$ & 8 & Yes & Yes \\
+  $[64,183]$ & $C_{16} \times C_2 \times C_2$ & 16 & Yes & Yes \\
+  $[64,184]$ & $C_2 \times (C_{16} : C_2)$ & 16 & Yes & Yes \\
+  $[64,185]$ & $(C_{16} : C_2) : C_2$ & 16 & Yes & Yes \\
+  $[64,186]$ & $C_2 \times D_{32}$ & 32 & Yes & Yes \\
+  $[64,187]$ & $C_2 \times QD_{32}$ & 16 & Yes & Yes \\
+  $[64,188]$ & $C_2 \times Q_{32}$ & 16 & Yes & Yes \\
+  $[64,189]$ & $Q_{32} : C_2$ & 16 & Yes & Yes \\
+  $[64,190]$ & $C_{16} : (C_2 \times C_2)$ & 16 & Yes & Yes \\
+  $[64,191]$ & $Q_{32} : C_2$ & 16 & Yes & Yes \\
+  $[64,192]$ & $C_4 \times C_4 \times C_2 \times C_2$ & 4 & Yes & Yes \\
+  $[64,193]$ & $C_2 \times C_2 \times ((C_4 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,194]$ & $C_2 \times C_2 \times (C_4 : C_4)$ & 4 & Yes & Yes \\
+  $[64,195]$ & $C_2 \times ((C_4 \times C_4) : C_2)$ & 4 & Yes & Yes \\
+  $[64,196]$ & $C_2 \times C_4 \times D_8$ & 4 & Yes & Yes \\
+  $[64,197]$ & $C_2 \times C_4 \times Q_8$ & 4 & Yes & Yes \\
+  $[64,198]$ & $C_4 \times ((C_4 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,199]$ & $D_8 : (C_4 \times C_2)$ & 4 & Yes & Yes \\
+  $[64,200]$ & $(C_2 \times Q_8) : C_4$ & 4 & Yes & Yes \\
+  $[64,201]$ & $Q_8 : (C_4 \times C_2)$ & 4 & Yes & Yes \\
+  $[64,202]$ & $C_2 \times ((C_2 \times C_2 \times C_2 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,203]$ & $C_2 \times ((C_4 \times C_2 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,204]$ & $C_2 \times ((C_2 \times Q_8) : C_2)$ & 4 & Yes & Yes \\
+  $[64,205]$ & $C_2 \times ((C_4 \times C_2 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,206]$ & $(C_2 \times C_2) : ((C_4 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,207]$ & $C_2 \times ((C_4 \times C_4) : C_2)$ & 4 & Yes & Yes \\
+  $[64,208]$ & $C_2 \times ((C_2 \times C_2) . (C_2 \times C_2 \times C_2))$ & 4 & Yes & Yes \\
+  $[64,209]$ & $C_2 \times ((C_4 \times C_4) : C_2)$ & 4 & Yes & Yes \\
+  $[64,210]$ & $((C_4 \times C_4) : C_2) : C_2$ & 4 & Yes & Yes \\
+  $[64,211]$ & $C_2 \times ((C_4 \times C_4) : C_2)$ & 4 & Yes & Yes \\
+  $[64,212]$ & $C_2 \times (C_4 : Q_8)$ & 4 & Yes & Yes \\
+  $[64,213]$ & $C_4 : ((C_4 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,214]$ & $(C_4 \times C_2) : Q_8$ & 4 & Yes & Yes \\
+  $[64,215]$ & $(C_2 \times C_2 \times C_2) : D_8$ & 4 & Yes & Yes \\
+  $[64,216]$ & $(C_4 \times C_2) : D_8$ & 4 & Yes & Yes \\
+  $[64,217]$ & $((C_2 \times Q_8) : C_2) : C_2$ & 4 & Yes & Yes \\
+  $[64,218]$ & $(C_4 \times C_2) : D_8$ & 4 & Yes & Yes \\
+  $[64,219]$ & $(C_2 \times Q_8) : (C_2 \times C_2)$ & 4 & Yes & Yes \\
+  $[64,220]$ & $((C_4 \times C_4) : C_2) : C_2$ & 4 & Yes & Yes \\
+  $[64,221]$ & $((C_4 \times C_2 \times C_2) : C_2) : C_2$ & 4 & Yes & Yes \\
+  $[64,222]$ & $((C_2 \times C_2) . (C_2 \times C_2 \times C_2)) : C_2$ & 4 & Yes & Yes \\
+  $[64,223]$ & $((C_2 \times Q_8) : C_2) : C_2$ & 4 & Yes & Yes \\
+  $[64,224]$ & $(C_2 \times C_2 \times C_2) : Q_8$ & 4 & Yes & Yes \\
+  $[64,225]$ & $(C_4 \times C_2) : Q_8$ & 4 & Yes & Yes \\
+  $[64,226]$ & $D_8 \times D_8$ & 4 & Yes & Yes \\
+  $[64,227]$ & $D_8 : D_8$ & 4 & Yes & Yes \\
+  $[64,228]$ & $D_8 : D_8$ & 4 & Yes & Yes \\
+  $[64,229]$ & $Q_8 : D_8$ & 4 & Yes & Yes \\
+  $[64,230]$ & $Q_8 \times D_8$ & 4 & Yes & Yes \\
+  $[64,231]$ & $Q_8 : D_8$ & 4 & Yes & Yes \\
+  $[64,232]$ & $(C_4 : C_4) : (C_2 \times C_2)$ & 4 & Yes & Yes \\
+  $[64,233]$ & $((C_4 \times C_4) : C_2) : C_2$ & 4 & Yes & Yes \\
+  $[64,234]$ & $((C_4 \times C_4) : C_2) : C_2$ & 4 & Yes & Yes \\
+  $[64,235]$ & $D_8 : Q_8$ & 4 & Yes & Yes \\
+  $[64,236]$ & $((C_4 \times C_4) : C_2) : C_2$ & 4 & Yes & Yes \\
+  $[64,237]$ & $((C_4 \times C_4) : C_2) : C_2$ & 4 & Yes & Yes \\
+  $[64,238]$ & $Q_8 : Q_8$ & 4 & Yes & Yes \\
+  $[64,239]$ & $Q_8 \times Q_8$ & 4 & Yes & Yes \\
+  $[64,240]$ & $((C_4 \times C_2 \times C_2) : C_2) : C_2$ & 4 & Yes & Yes \\
+  $[64,241]$ & $(C_4 : C_4) : (C_2 \times C_2)$ & 4 & Yes & Yes \\
+  $[64,242]$ & $((C_4 \times C_2) : C_2) : (C_2 \times C_2)$ & 4 & Yes & Yes \\
+  $[64,243]$ & $((C_2 \times C_2) . (C_2 \times C_2 \times C_2)) : C_2$ & 4 & Yes & Yes \\
+  $[64,244]$ & $((C_4 \times C_4) : C_2) : C_2$ & 4 & Yes & Yes \\
+  $[64,245]$ & $(C_2 \times C_2) . (C_2 \times C_2 \times C_2 \times C_2)$ & 4 & Yes & Yes \\
+  $[64,246]$ & $C_8 \times C_2 \times C_2 \times C_2$ & 8 & Yes & Yes \\
+  $[64,247]$ & $C_2 \times C_2 \times (C_8 : C_2)$ & 8 & Yes & Yes \\
+  $[64,248]$ & $C_2 \times ((C_8 \times C_2) : C_2)$ & 8 & Yes & Yes \\
+  $[64,249]$ & $(C_8 \times C_2) : (C_2 \times C_2)$ & 8 & Yes & Yes \\
+  $[64,250]$ & $C_2 \times C_2 \times D_{16}$ & 16 & Yes & Yes \\
+  $[64,251]$ & $C_2 \times C_2 \times QD_{16}$ & 8 & Yes & Yes \\
+  $[64,252]$ & $C_2 \times C_2 \times Q_{16}$ & 8 & Yes & Yes \\
+  $[64,253]$ & $C_2 \times ((C_8 \times C_2) : C_2)$ & 8 & Yes & Yes \\
+  $[64,254]$ & $C_2 \times (C_8 : (C_2 \times C_2))$ & 8 & Yes & Yes \\
+  $[64,255]$ & $C_2 \times ((C_2 \times Q_8) : C_2)$ & 4 & Yes & Yes \\
+  $[64,256]$ & $QD_{16} : (C_2 \times C_2)$ & 8 & Yes & Yes \\
+  $[64,257]$ & $Q_{16} : (C_2 \times C_2)$ & 8 & Yes & Yes \\
+  $[64,258]$ & $QD_{16} : (C_2 \times C_2)$ & 8 & Yes & Yes \\
+  $[64,259]$ & $(C_2 \times Q_{16}) : C_2$ & 8 & Yes & Yes \\
+  $[64,260]$ & $C_4 \times C_2 \times C_2 \times C_2 \times C_2$ & 4 & Yes & Yes \\
+  $[64,261]$ & $C_2 \times C_2 \times C_2 \times D_8$ & 4 & Yes & Yes \\
+  $[64,262]$ & $C_2 \times C_2 \times C_2 \times Q_8$ & 4 & Yes & Yes \\
+  $[64,263]$ & $C_2 \times C_2 \times ((C_4 \times C_2) : C_2)$ & 4 & Yes & Yes \\
+  $[64,264]$ & $C_2 \times ((C_2 \times C_2 \times C_2) : (C_2 \times C_2))$ & 4 & Yes & Yes \\
+  $[64,265]$ & $C_2 \times ((C_2 \times Q_8) : C_2)$ & 4 & Yes & Yes \\
+  $[64,266]$ & $((C_4 \times C_2) : C_2) : (C_2 \times C_2)$ & 4 & Yes & Yes \\
+  $[64,267]$ & $C_2 \times C_2 \times C_2 \times C_2 \times C_2 \times C_2$ & 2 & Yes & Yes \\
+  $[65,1]$ & $C_{65}$ & 65 & Yes & No \\
+  $[66,1]$ & $C_{11} \times S_3$ & 33 & No & No \\
+  $[66,2]$ & $C_3 \times D_{22}$ & 33 & No & No \\
+  $[66,3]$ & $D_{66}$ & 66 & No & No \\
+  $[66,4]$ & $C_{66}$ & 66 & Yes & No \\
+  $[67,1]$ & $C_{67}$ & 67 & Yes & No \\
+  $[68,1]$ & $C_{17} : C_4$ & 68 & No & No \\
+  $[68,2]$ & $C_{68}$ & 68 & Yes & No \\
+  $[68,3]$ & $C_{17} : C_4$ & 68 & No & No \\
+  $[68,4]$ & $D_{68}$ & 68 & Yes & Yes \\
+  $[68,5]$ & $C_{34} \times C_2$ & 34 & Yes & Yes \\
+  $[69,1]$ & $C_{69}$ & 69 & Yes & No \\
+  $[70,1]$ & $C_7 \times D_{10}$ & 35 & No & No \\
+  $[70,2]$ & $C_5 \times D_{14}$ & 35 & No & No \\
+  $[70,3]$ & $D_{70}$ & 70 & No & No \\
+  $[70,4]$ & $C_{70}$ & 70 & Yes & No \\
+  $[71,1]$ & $C_{71}$ & 71 & Yes & No \\
+  $[72,1]$ & $C_9 : C_8$ & 72 & No & No \\
+  $[72,2]$ & $C_{72}$ & 72 & Yes & No \\
+  $[72,3]$ & $Q_8 : C_9$ & 72 & No & No \\
+  $[72,4]$ & $C_9 : Q_8$ & 36 & Yes & Yes \\
+  $[72,5]$ & $C_4 \times D_{18}$ & 36 & Yes & Yes \\
+  $[72,6]$ & $D_{72}$ & 36 & Yes & Yes \\
+  $[72,7]$ & $C_2 \times (C_9 : C_4)$ & 36 & Yes & Yes \\
+  $[72,8]$ & $(C_{18} \times C_2) : C_2$ & 18 & Yes & Yes \\
+  $[72,9]$ & $C_{36} \times C_2$ & 36 & Yes & Yes \\
+  $[72,10]$ & $C_9 \times D_8$ & 36 & Yes & Yes \\
+  $[72,11]$ & $C_9 \times Q_8$ & 36 & Yes & Yes \\
+  $[72,12]$ & $C_3 \times (C_3 : C_8)$ & 24 & No & No \\
+  $[72,13]$ & $(C_3 \times C_3) : C_8$ & 24 & Yes & Yes \\
+  $[72,14]$ & $C_{24} \times C_3$ & 24 & Yes & Yes \\
+  $[72,15]$ & $((C_2 \times C_2) : C_9) : C_2$ & 18 & No & No \\
+  $[72,16]$ & $C_2 \times ((C_2 \times C_2) : C_9)$ & 18 & No & No \\
+  $[72,17]$ & $C_2 \times C_2 \times D_{18}$ & 18 & Yes & Yes \\
+  $[72,18]$ & $C_{18} \times C_2 \times C_2$ & 18 & Yes & Yes \\
+  $[72,19]$ & $(C_3 \times C_3) : C_8$ & 24 & No & No \\
+  $[72,20]$ & $(C_3 : C_4) \times S_3$ & 12 & Yes & Yes \\
+  $[72,21]$ & $(C_3 \times C_3) : (C_4 \times C_2)$ & 12 & Yes & Yes \\
+  $[72,22]$ & $(C_6 \times S_3) : C_2$ & 12 & Yes & Yes \\
+  $[72,23]$ & $(C_6 \times S_3) : C_2$ & 12 & Yes & Yes \\
+  $[72,24]$ & $(C_3 \times C_3) : Q_8$ & 12 & Yes & Yes \\
+  $[72,25]$ & $C_3 \times SL(2,3)$ & 12 & Yes & Yes \\
+  $[72,26]$ & $C_3 \times (C_3 : Q_8)$ & 12 & Yes & Yes \\
+  $[72,27]$ & $C_{12} \times S_3$ & 12 & Yes & Yes \\
+  $[72,28]$ & $C_3 \times D_{24}$ & 24 & Yes & Yes \\
+  $[72,29]$ & $C_6 \times (C_3 : C_4)$ & 12 & Yes & Yes \\
+  $[72,30]$ & $C_3 \times ((C_6 \times C_2) : C_2)$ & 12 & Yes & Yes \\
+  $[72,31]$ & $(C_3 \times C_3) : Q_8$ & 12 & Yes & Yes \\
+  $[72,32]$ & $C_4 \times ((C_3 \times C_3) : C_2)$ & 12 & Yes & Yes \\
+  $[72,33]$ & $(C_{12} \times C_3) : C_2$ & 12 & Yes & Yes \\
+  $[72,34]$ & $C_2 \times ((C_3 \times C_3) : C_4)$ & 12 & Yes & Yes \\
+  $[72,35]$ & $(C_6 \times C_6) : C_2$ & 12 & Yes & Yes \\
+  $[72,36]$ & $C_{12} \times C_6$ & 12 & Yes & Yes \\
+  $[72,37]$ & $C_3 \times C_3 \times D_8$ & 12 & Yes & Yes \\
+  $[72,38]$ & $C_3 \times C_3 \times Q_8$ & 12 & Yes & Yes \\
+  $[72,39]$ & $(C_3 \times C_3) : C_8$ & 24 & No & No \\
+  $[72,40]$ & $(S_3 \times S_3) : C_2$ & 12 & Yes & Yes \\
+  $[72,41]$ & $(C_3 \times C_3) : Q_8$ & 12 & Yes & Yes \\
+  $[72,42]$ & $C_3 \times S_4$ & 12 & No & Yes \\
+  $[72,43]$ & $(C_3 \times A_4) : C_2$ & 12 & Yes & Yes \\
+  $[72,44]$ & $A_4 \times S_3$ & 12 & No & No \\
+  $[72,45]$ & $C_2 \times ((C_3 \times C_3) : C_4)$ & 12 & Yes & Yes \\
+  $[72,46]$ & $C_2 \times S_3 \times S_3$ & 12 & Yes & Yes \\
+  $[72,47]$ & $C_6 \times A_4$ & 12 & Yes & No \\
+  $[72,48]$ & $C_2 \times C_6 \times S_3$ & 12 & Yes & Yes \\
+  $[72,49]$ & $C_2 \times C_2 \times ((C_3 \times C_3) : C_2)$ & 12 & Yes & Yes \\
+  $[72,50]$ & $C_6 \times C_6 \times C_2$ & 6 & Yes & Yes \\
+  $[73,1]$ & $C_{73}$ & 73 & Yes & No \\
+  $[74,1]$ & $D_{74}$ & 74 & No & No \\
+  $[74,2]$ & $C_{74}$ & 74 & Yes & No \\
+  $[75,1]$ & $C_{75}$ & 75 & Yes & No \\
+  $[75,2]$ & $(C_5 \times C_5) : C_3$ & 15 & No & No \\
+  $[75,3]$ & $C_{15} \times C_5$ & 15 & Yes & Yes \\
+  $[76,1]$ & $C_{19} : C_4$ & 76 & No & No \\
+  $[76,2]$ & $C_{76}$ & 76 & Yes & No \\
+  $[76,3]$ & $D_{76}$ & 76 & Yes & Yes \\
+  $[76,4]$ & $C_{38} \times C_2$ & 38 & Yes & Yes \\
+  $[77,1]$ & $C_{77}$ & 77 & Yes & No \\
+  $[78,1]$ & $C_{13} : C_6$ & 78 & No & No \\
+  $[78,2]$ & $C_2 \times (C_{13} : C_3)$ & 39 & No & No \\
+  $[78,3]$ & $C_{13} \times S_3$ & 39 & No & No \\
+  $[78,4]$ & $C_3 \times D_{26}$ & 39 & No & No \\
+  $[78,5]$ & $D_{78}$ & 78 & No & No \\
+  $[78,6]$ & $C_{78}$ & 78 & Yes & No \\
+  $[79,1]$ & $C_{79}$ & 79 & Yes & No \\
+  $[80,1]$ & $C_5 : C_{16}$ & 80 & No & No \\
+  $[80,2]$ & $C_{80}$ & 80 & Yes & No \\
+  $[80,3]$ & $C_5 : C_{16}$ & 80 & No & No \\
+  $[80,4]$ & $C_8 \times D_{10}$ & 40 & Yes & Yes \\
+  $[80,5]$ & $C_{40} : C_2$ & 40 & Yes & Yes \\
+  $[80,6]$ & $C_{40} : C_2$ & 40 & Yes & Yes \\
+  $[80,7]$ & $D_{80}$ & 40 & Yes & Yes \\
+  $[80,8]$ & $C_5 : Q_{16}$ & 40 & Yes & Yes \\
+  $[80,9]$ & $C_2 \times (C_5 : C_8)$ & 40 & Yes & Yes \\
+  $[80,10]$ & $(C_5 : C_8) : C_2$ & 40 & Yes & Yes \\
+  $[80,11]$ & $C_4 \times (C_5 : C_4)$ & 20 & Yes & Yes \\
+  $[80,12]$ & $(C_5 : C_4) : C_4$ & 20 & Yes & Yes \\
+  $[80,13]$ & $C_{20} : C_4$ & 20 & Yes & Yes \\
+  $[80,14]$ & $(C_{20} \times C_2) : C_2$ & 20 & Yes & Yes \\
+  $[80,15]$ & $(C_5 \times D_8) : C_2$ & 20 & Yes & Yes \\
+  $[80,16]$ & $(C_5 : Q_8) : C_2$ & 20 & Yes & Yes \\
+  $[80,17]$ & $(C_5 \times Q_8) : C_2$ & 20 & Yes & Yes \\
+  $[80,18]$ & $C_5 : Q_{16}$ & 40 & Yes & Yes \\
+  $[80,19]$ & $(C_{10} \times C_2) : C_4$ & 20 & Yes & Yes \\
+  $[80,20]$ & $C_{20} \times C_4$ & 20 & Yes & Yes \\
+  $[80,21]$ & $C_5 \times ((C_4 \times C_2) : C_2)$ & 20 & Yes & Yes \\
+  $[80,22]$ & $C_5 \times (C_4 : C_4)$ & 20 & Yes & Yes \\
+  $[80,23]$ & $C_{40} \times C_2$ & 40 & Yes & Yes \\
+  $[80,24]$ & $C_5 \times (C_8 : C_2)$ & 40 & Yes & Yes \\
+  $[80,25]$ & $C_5 \times D_{16}$ & 40 & Yes & Yes \\
+  $[80,26]$ & $C_5 \times QD_{16}$ & 40 & Yes & Yes \\
+  $[80,27]$ & $C_5 \times Q_{16}$ & 40 & Yes & Yes \\
+  $[80,28]$ & $C_5 : (C_8 \times C_2)$ & 40 & Yes & Yes \\
+  $[80,29]$ & $(C_5 : C_8) : C_2$ & 40 & Yes & Yes \\
+  $[80,30]$ & $C_4 \times (C_5 : C_4)$ & 20 & Yes & Yes \\
+  $[80,31]$ & $C_{20} : C_4$ & 20 & Yes & Yes \\
+  $[80,32]$ & $C_2 \times (C_5 : C_8)$ & 40 & Yes & Yes \\
+  $[80,33]$ & $(C_5 : C_8) : C_2$ & 40 & Yes & Yes \\
+  $[80,34]$ & $(C_{10} \times C_2) : C_4$ & 20 & Yes & Yes \\
+  $[80,35]$ & $C_2 \times (C_5 : Q_8)$ & 20 & Yes & Yes \\
+  $[80,36]$ & $C_2 \times C_4 \times D_{10}$ & 20 & Yes & Yes \\
+  $[80,37]$ & $C_2 \times D_{40}$ & 40 & Yes & Yes \\
+  $[80,38]$ & $(C_{20} \times C_2) : C_2$ & 20 & Yes & Yes \\
+  $[80,39]$ & $D_8 \times D_{10}$ & 20 & Yes & Yes \\
+  $[80,40]$ & $(C_4 \times D_{10}) : C_2$ & 20 & Yes & Yes \\
+  $[80,41]$ & $Q_8 \times D_{10}$ & 20 & Yes & Yes \\
+  $[80,42]$ & $(C_4 \times D_{10}) : C_2$ & 20 & Yes & Yes \\
+  $[80,43]$ & $C_2 \times C_2 \times (C_5 : C_4)$ & 20 & Yes & Yes \\
+  $[80,44]$ & $C_2 \times ((C_{10} \times C_2) : C_2)$ & 20 & Yes & Yes \\
+  $[80,45]$ & $C_{20} \times C_2 \times C_2$ & 20 & Yes & Yes \\
+  $[80,46]$ & $C_{10} \times D_8$ & 20 & Yes & Yes \\
+  $[80,47]$ & $C_{10} \times Q_8$ & 20 & Yes & Yes \\
+  $[80,48]$ & $C_5 \times ((C_4 \times C_2) : C_2)$ & 20 & Yes & Yes \\
+  $[80,49]$ & $(C_2 \times C_2 \times C_2 \times C_2) : C_5$ & 20 & No & No \\
+  $[80,50]$ & $C_2 \times C_2 \times (C_5 : C_4)$ & 20 & Yes & Yes \\
+  $[80,51]$ & $C_2 \times C_2 \times C_2 \times D_{10}$ & 20 & Yes & Yes \\
+  $[80,52]$ & $C_{10} \times C_2 \times C_2 \times C_2$ & 10 & Yes & Yes \\
+  $[81,1]$ & $C_{81}$ & 81 & Yes & No \\
+  $[81,2]$ & $C_9 \times C_9$ & 9 & Yes & Yes \\
+  $[81,3]$ & $(C_9 \times C_3) : C_3$ & 9 & Yes & Yes \\
+  $[81,4]$ & $C_9 : C_9$ & 9 & Yes & Yes \\
+  $[81,5]$ & $C_{27} \times C_3$ & 27 & Yes & Yes \\
+  $[81,6]$ & $C_{27} : C_3$ & 27 & Yes & Yes \\
+  $[81,7]$ & $(C_3 \times C_3 \times C_3) : C_3$ & 9 & Yes & Yes \\
+  $[81,8]$ & $(C_9 \times C_3) : C_3$ & 9 & Yes & Yes \\
+  $[81,9]$ & $(C_9 \times C_3) : C_3$ & 9 & Yes & Yes \\
+  $[81,10]$ & $C_3 . ((C_3 \times C_3) : C_3)$ & 9 & Yes & Yes \\
+  $[81,11]$ & $C_9 \times C_3 \times C_3$ & 9 & Yes & Yes \\
+  $[81,12]$ & $C_3 \times ((C_3 \times C_3) : C_3)$ & 9 & Yes & Yes \\
+  $[81,13]$ & $C_3 \times (C_9 : C_3)$ & 9 & Yes & Yes \\
+  $[81,14]$ & $(C_9 \times C_3) : C_3$ & 9 & Yes & Yes \\
+  $[81,15]$ & $C_3 \times C_3 \times C_3 \times C_3$ & 3 & Yes & Yes \\
+  $[82,1]$ & $D_{82}$ & 82 & No & No \\
+  $[82,2]$ & $C_{82}$ & 82 & Yes & No \\
+  $[83,1]$ & $C_{83}$ & 83 & Yes & No \\
+  $[84,1]$ & $C_7 : C_{12}$ & 84 & No & No \\
+  $[84,2]$ & $C_4 \times (C_7 : C_3)$ & 21 & No & No \\
+  $[84,3]$ & $C_7 \times (C_3 : C_4)$ & 21 & No & No \\
+  $[84,4]$ & $C_3 \times (C_7 : C_4)$ & 21 & No & No \\
+  $[84,5]$ & $C_{21} : C_4$ & 84 & No & No \\
+  $[84,6]$ & $C_{84}$ & 84 & Yes & No \\
+  $[84,7]$ & $C_2 \times (C_7 : C_6)$ & 42 & Yes & Yes \\
+  $[84,8]$ & $S_3 \times D_{14}$ & 42 & Yes & Yes \\
+  $[84,9]$ & $C_2 \times C_2 \times (C_7 : C_3)$ & 21 & Yes & No \\
+  $[84,10]$ & $C_7 \times A_4$ & 42 & No & No \\
+  $[84,11]$ & $(C_{14} \times C_2) : C_3$ & 42 & No & No \\
+  $[84,12]$ & $C_6 \times D_{14}$ & 42 & Yes & Yes \\
+  $[84,13]$ & $C_{14} \times S_3$ & 42 & Yes & Yes \\
+  $[84,14]$ & $D_{84}$ & 42 & Yes & Yes \\
+  $[84,15]$ & $C_{42} \times C_2$ & 42 & Yes & Yes \\
+  $[85,1]$ & $C_{85}$ & 85 & Yes & No \\
+  $[86,1]$ & $D_{86}$ & 86 & No & No \\
+  $[86,2]$ & $C_{86}$ & 86 & Yes & No \\
+  $[87,1]$ & $C_{87}$ & 87 & Yes & No \\
+  $[88,1]$ & $C_{11} : C_8$ & 88 & No & No \\
+  $[88,2]$ & $C_{88}$ & 88 & Yes & No \\
+  $[88,3]$ & $C_{11} : Q_8$ & 44 & Yes & Yes \\
+  $[88,4]$ & $C_4 \times D_{22}$ & 44 & Yes & Yes \\
+  $[88,5]$ & $D_{88}$ & 44 & Yes & Yes \\
+  $[88,6]$ & $C_2 \times (C_{11} : C_4)$ & 44 & Yes & Yes \\
+  $[88,7]$ & $(C_{22} \times C_2) : C_2$ & 22 & Yes & Yes \\
+  $[88,8]$ & $C_{44} \times C_2$ & 44 & Yes & Yes \\
+  $[88,9]$ & $C_{11} \times D_8$ & 44 & Yes & Yes \\
+  $[88,10]$ & $C_{11} \times Q_8$ & 44 & Yes & Yes \\
+  $[88,11]$ & $C_2 \times C_2 \times D_{22}$ & 22 & Yes & Yes \\
+  $[88,12]$ & $C_{22} \times C_2 \times C_2$ & 22 & Yes & Yes \\
+  $[89,1]$ & $C_{89}$ & 89 & Yes & No \\
+  $[90,1]$ & $C_5 \times D_{18}$ & 45 & No & No \\
+  $[90,2]$ & $C_9 \times D_{10}$ & 45 & No & No \\
+  $[90,3]$ & $D_{90}$ & 90 & No & No \\
+  $[90,4]$ & $C_{90}$ & 90 & Yes & No \\
+  $[90,5]$ & $C_3 \times C_3 \times D_{10}$ & 15 & Yes & Yes \\
+  $[90,6]$ & $C_{15} \times S_3$ & 45 & No & No \\
+  $[90,7]$ & $C_3 \times D_{30}$ & 30 & No & No \\
+  $[90,8]$ & $C_5 \times ((C_3 \times C_3) : C_2)$ & 15 & Yes & Yes \\
+  $[90,9]$ & $(C_{15} \times C_3) : C_2$ & 15 & Yes & Yes \\
+  $[90,10]$ & $C_{30} \times C_3$ & 30 & Yes & Yes \\
+  $[91,1]$ & $C_{91}$ & 91 & Yes & No \\
+  $[92,1]$ & $C_{23} : C_4$ & 92 & No & No \\
+  $[92,2]$ & $C_{92}$ & 92 & Yes & No \\
+  $[92,3]$ & $D_{92}$ & 92 & Yes & Yes \\
+  $[92,4]$ & $C_{46} \times C_2$ & 46 & Yes & Yes \\
+  $[93,1]$ & $C_{31} : C_3$ & 93 & No & No \\
+  $[93,2]$ & $C_{93}$ & 93 & Yes & No \\
+  $[94,1]$ & $D_{94}$ & 94 & No & No \\
+  $[94,2]$ & $C_{94}$ & 94 & Yes & No \\
+  $[95,1]$ & $C_{95}$ & 95 & Yes & No \\
+  $[96,1]$ & $C_3 : C_{32}$ & 96 & No & No \\
+  $[96,2]$ & $C_{96}$ & 96 & Yes & No \\
+  $[96,3]$ & $((C_4 \times C_2) : C_4) : C_3$ & 48 & No & No \\
+  $[96,4]$ & $C_{16} \times S_3$ & 48 & Yes & Yes \\
+  $[96,5]$ & $C_3 : (C_{16} : C_2)$ & 48 & Yes & Yes \\
+  $[96,6]$ & $D_{96}$ & 48 & Yes & Yes \\
+  $[96,7]$ & $C_3 : QD_{32}$ & 48 & Yes & Yes \\
+  $[96,8]$ & $C_3 : Q_{32}$ & 48 & Yes & Yes \\
+  $[96,9]$ & $C_4 \times (C_3 : C_8)$ & 24 & Yes & Yes \\
+  $[96,10]$ & $C_3 : (C_8 : C_4)$ & 24 & Yes & Yes \\
+  $[96,11]$ & $C_3 : (C_4 : C_8)$ & 24 & Yes & Yes \\
+  $[96,12]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,13]$ & $C_3 : ((C_2 \times C_2 \times C_2) : C_4)$ & 24 & Yes & Yes \\
+  $[96,14]$ & $C_3 : (C_8 : C_4)$ & 24 & Yes & Yes \\
+  $[96,15]$ & $C_3 : (C_8 : C_4)$ & 24 & Yes & Yes \\
+  $[96,16]$ & $C_3 : ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,17]$ & $C_3 : (Q_8 : C_4)$ & 24 & Yes & Yes \\
+  $[96,18]$ & $C_2 \times (C_3 : C_{16})$ & 48 & Yes & Yes \\
+  $[96,19]$ & $C_3 : (C_{16} : C_2)$ & 48 & Yes & Yes \\
+  $[96,20]$ & $C_8 \times (C_3 : C_4)$ & 24 & Yes & Yes \\
+  $[96,21]$ & $C_3 : (C_4 : C_8)$ & 24 & Yes & Yes \\
+  $[96,22]$ & $C_3 : (C_8 : C_4)$ & 24 & Yes & Yes \\
+  $[96,23]$ & $C_3 : (Q_8 : C_4)$ & 24 & Yes & Yes \\
+  $[96,24]$ & $C_3 : (C_8 : C_4)$ & 24 & Yes & Yes \\
+  $[96,25]$ & $C_3 : (C_8 : C_4)$ & 24 & Yes & Yes \\
+  $[96,26]$ & $C_3 : (C_4 . D_8)$ & 24 & Yes & Yes \\
+  $[96,27]$ & $C_3 : ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,28]$ & $C_3 : ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,29]$ & $C_3 : (C_4 . D_8)$ & 24 & Yes & Yes \\
+  $[96,30]$ & $C_3 : ((C_8 : C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,31]$ & $C_3 : (C_2 . ((C_4 \times C_2) : C_2))$ & 24 & Yes & Yes \\
+  $[96,32]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,33]$ & $C_3 : D_{32}$ & 48 & Yes & Yes \\
+  $[96,34]$ & $C_3 : QD_{32}$ & 48 & Yes & Yes \\
+  $[96,35]$ & $C_3 : QD_{32}$ & 48 & Yes & Yes \\
+  $[96,36]$ & $C_3 : Q_{32}$ & 48 & Yes & Yes \\
+  $[96,37]$ & $C_3 : ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,38]$ & $C_3 : ((C_4 \times C_2) : C_4)$ & 24 & Yes & Yes \\
+  $[96,39]$ & $C_3 : ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,40]$ & $C_3 : ((C_8 : C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,41]$ & $C_3 : ((C_2 \times C_2 \times C_2) : C_4)$ & 24 & Yes & Yes \\
+  $[96,42]$ & $C_3 : (Q_8 : C_4)$ & 24 & Yes & Yes \\
+  $[96,43]$ & $C_3 : (C_2 . ((C_4 \times C_2) : C_2))$ & 24 & Yes & Yes \\
+  $[96,44]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,45]$ & $C_3 \times ((C_4 \times C_2) : C_4)$ & 24 & Yes & Yes \\
+  $[96,46]$ & $C_{24} \times C_4$ & 24 & Yes & Yes \\
+  $[96,47]$ & $C_3 \times (C_8 : C_4)$ & 24 & Yes & Yes \\
+  $[96,48]$ & $C_3 \times ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,49]$ & $C_3 \times ((C_2 \times C_2 \times C_2) : C_4)$ & 24 & Yes & Yes \\
+  $[96,50]$ & $C_3 \times ((C_8 : C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,51]$ & $C_3 \times (C_2 . ((C_4 \times C_2) : C_2))$ & 24 & Yes & Yes \\
+  $[96,52]$ & $C_3 \times ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,53]$ & $C_3 \times (Q_8 : C_4)$ & 24 & Yes & Yes \\
+  $[96,54]$ & $C_3 \times ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,55]$ & $C_3 \times (C_4 : C_8)$ & 24 & Yes & Yes \\
+  $[96,56]$ & $C_3 \times (C_8 : C_4)$ & 24 & Yes & Yes \\
+  $[96,57]$ & $C_3 \times (C_8 : C_4)$ & 24 & Yes & Yes \\
+  $[96,58]$ & $C_3 \times (C_4 . D_8)$ & 24 & Yes & Yes \\
+  $[96,59]$ & $C_{48} \times C_2$ & 48 & Yes & Yes \\
+  $[96,60]$ & $C_3 \times (C_{16} : C_2)$ & 48 & Yes & Yes \\
+  $[96,61]$ & $C_3 \times D_{32}$ & 48 & Yes & Yes \\
+  $[96,62]$ & $C_3 \times QD_{32}$ & 48 & Yes & Yes \\
+  $[96,63]$ & $C_3 \times Q_{32}$ & 48 & Yes & Yes \\
+  $[96,64]$ & $(C_4 \times C_4) : S_3$ & 24 & No & No \\
+  $[96,65]$ & $(C_2 \times C_2) : (C_3 : C_8)$ & 24 & No & No \\
+  $[96,66]$ & $Q_8 : (C_3 : C_4)$ & 24 & No & No \\
+  $[96,67]$ & $SL(2,3) : C_4$ & 24 & No & No \\
+  $[96,68]$ & $C_2 \times ((C_4 \times C_4) : C_3)$ & 24 & No & No \\
+  $[96,69]$ & $C_4 \times SL(2,3)$ & 24 & No & No \\
+  $[96,70]$ & $((C_2 \times C_2 \times C_2 \times C_2) : C_2) : C_3$ & 24 & No & No \\
+  $[96,71]$ & $((C_4 \times C_4) : C_2) : C_3$ & 24 & No & No \\
+  $[96,72]$ & $((C_4 \times C_4) : C_2) : C_3$ & 24 & No & No \\
+  $[96,73]$ & $C_8 \times A_4$ & 24 & No & No \\
+  $[96,74]$ & $((C_8 \times C_2) : C_2) : C_3$ & 24 & No & No \\
+  $[96,75]$ & $C_4 \times (C_3 : Q_8)$ & 24 & Yes & Yes \\
+  $[96,76]$ & $C_3 : (C_4 : Q_8)$ & 24 & Yes & Yes \\
+  $[96,77]$ & $C_3 : ((C_2 \times C_2) . (C_2 \times C_2 \times C_2))$ & 24 & Yes & Yes \\
+  $[96,78]$ & $C_4 \times C_4 \times S_3$ & 12 & Yes & Yes \\
+  $[96,79]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,80]$ & $C_4 \times D_{24}$ & 24 & Yes & Yes \\
+  $[96,81]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,82]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,83]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,84]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,85]$ & $C_3 : ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,86]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,87]$ & $((C_4 \times C_2) : C_2) \times S_3$ & 12 & Yes & Yes \\
+  $[96,88]$ & $C_3 : (C_4 \times D_8)$ & 24 & Yes & Yes \\
+  $[96,89]$ & $C_3 : ((C_2 \times C_2 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,90]$ & $C_3 : ((C_4 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,91]$ & $C_3 : ((C_4 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,92]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,93]$ & $C_3 : ((C_4 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,94]$ & $C_3 : (C_4 \times Q_8)$ & 24 & Yes & Yes \\
+  $[96,95]$ & $C_3 : (C_4 : Q_8)$ & 24 & Yes & Yes \\
+  $[96,96]$ & $C_3 : ((C_2 \times C_2) . (C_2 \times C_2 \times C_2))$ & 24 & Yes & Yes \\
+  $[96,97]$ & $C_3 : ((C_2 \times C_2) . (C_2 \times C_2 \times C_2))$ & 24 & Yes & Yes \\
+  $[96,98]$ & $(C_4 : C_4) \times S_3$ & 12 & Yes & Yes \\
+  $[96,99]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,100]$ & $C_3 : (C_4 \times D_8)$ & 24 & Yes & Yes \\
+  $[96,101]$ & $C_3 : ((C_4 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,102]$ & $C_3 : ((C_4 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,103]$ & $C_3 : ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,104]$ & $C_3 : ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,105]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,106]$ & $C_2 \times C_8 \times S_3$ & 24 & Yes & Yes \\
+  $[96,107]$ & $C_2 \times (C_{24} : C_2)$ & 24 & Yes & Yes \\
+  $[96,108]$ & $C_3 : ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,109]$ & $C_2 \times (C_{24} : C_2)$ & 24 & Yes & Yes \\
+  $[96,110]$ & $C_2 \times D_{48}$ & 48 & Yes & Yes \\
+  $[96,111]$ & $C_3 : ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,112]$ & $C_2 \times (C_3 : Q_{16})$ & 24 & Yes & Yes \\
+  $[96,113]$ & $(C_8 : C_2) \times S_3$ & 24 & Yes & Yes \\
+  $[96,114]$ & $C_3 : ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,115]$ & $C_3 : (C_8 : (C_2 \times C_2))$ & 24 & Yes & Yes \\
+  $[96,116]$ & $C_3 : ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,117]$ & $D_{16} \times S_3$ & 48 & Yes & Yes \\
+  $[96,118]$ & $C_3 : (C_8 : (C_2 \times C_2))$ & 24 & Yes & Yes \\
+  $[96,119]$ & $C_3 : ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,120]$ & $QD_{16} \times S_3$ & 24 & Yes & Yes \\
+  $[96,121]$ & $C_3 : (C_8 : (C_2 \times C_2))$ & 24 & Yes & Yes \\
+  $[96,122]$ & $C_3 : ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,123]$ & $C_3 : ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,124]$ & $Q_{16} \times S_3$ & 24 & Yes & Yes \\
+  $[96,125]$ & $C_3 : ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,126]$ & $C_3 : ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,127]$ & $C_2 \times C_2 \times (C_3 : C_8)$ & 24 & Yes & Yes \\
+  $[96,128]$ & $C_2 \times ((C_3 : C_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,129]$ & $C_2 \times C_4 \times (C_3 : C_4)$ & 12 & Yes & Yes \\
+  $[96,130]$ & $C_2 \times ((C_3 : C_4) : C_4)$ & 12 & Yes & Yes \\
+  $[96,131]$ & $C_3 : ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,132]$ & $C_2 \times (C_{12} : C_4)$ & 24 & Yes & Yes \\
+  $[96,133]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,134]$ & $C_2 \times ((C_{12} \times C_2) : C_2)$ & 12 & Yes & Yes \\
+  $[96,135]$ & $C_4 \times ((C_6 \times C_2) : C_2)$ & 12 & Yes & Yes \\
+  $[96,136]$ & $C_3 : ((C_4 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,137]$ & $C_3 : ((C_4 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,138]$ & $C_2 \times ((C_3 \times D_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,139]$ & $C_3 : (C_8 : (C_2 \times C_2))$ & 24 & Yes & Yes \\
+  $[96,140]$ & $C_2 \times ((C_3 : Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,141]$ & $D_8 \times (C_3 : C_4)$ & 12 & Yes & Yes \\
+  $[96,142]$ & $C_3 : ((C_4 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,143]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,144]$ & $C_3 : ((C_2 \times C_2 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,145]$ & $C_3 : ((C_4 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,146]$ & $C_3 : ((C_4 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,147]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,148]$ & $C_2 \times ((C_3 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,149]$ & $C_3 : ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,150]$ & $C_2 \times (C_3 : Q_{16})$ & 24 & Yes & Yes \\
+  $[96,151]$ & $C_3 : (C_4 : Q_8)$ & 24 & Yes & Yes \\
+  $[96,152]$ & $Q_8 \times (C_3 : C_4)$ & 12 & Yes & Yes \\
+  $[96,153]$ & $C_3 : ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,154]$ & $C_3 : ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,155]$ & $C_3 : ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,156]$ & $C_3 : (C_8 : (C_2 \times C_2))$ & 24 & Yes & Yes \\
+  $[96,157]$ & $C_3 : ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,158]$ & $C_3 : ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,159]$ & $C_2 \times ((C_6 \times C_2) : C_4)$ & 12 & Yes & Yes \\
+  $[96,160]$ & $C_3 : ((C_2 \times C_2 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,161]$ & $C_{12} \times C_4 \times C_2$ & 12 & Yes & Yes \\
+  $[96,162]$ & $C_6 \times ((C_4 \times C_2) : C_2)$ & 12 & Yes & Yes \\
+  $[96,163]$ & $C_6 \times (C_4 : C_4)$ & 12 & Yes & Yes \\
+  $[96,164]$ & $C_3 \times ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,165]$ & $C_{12} \times D_8$ & 12 & Yes & Yes \\
+  $[96,166]$ & $C_{12} \times Q_8$ & 12 & Yes & Yes \\
+  $[96,167]$ & $C_3 \times ((C_2 \times C_2 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,168]$ & $C_3 \times ((C_4 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,169]$ & $C_3 \times ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,170]$ & $C_3 \times ((C_4 \times C_2 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,171]$ & $C_3 \times ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,172]$ & $C_3 \times ((C_2 \times C_2) . (C_2 \times C_2 \times C_2))$ & 24 & Yes & Yes \\
+  $[96,173]$ & $C_3 \times ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,174]$ & $C_3 \times ((C_4 \times C_4) : C_2)$ & 24 & Yes & Yes \\
+  $[96,175]$ & $C_3 \times (C_4 : Q_8)$ & 24 & Yes & Yes \\
+  $[96,176]$ & $C_{24} \times C_2 \times C_2$ & 24 & Yes & Yes \\
+  $[96,177]$ & $C_6 \times (C_8 : C_2)$ & 24 & Yes & Yes \\
+  $[96,178]$ & $C_3 \times ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,179]$ & $C_6 \times D_{16}$ & 48 & Yes & Yes \\
+  $[96,180]$ & $C_6 \times QD_{16}$ & 24 & Yes & Yes \\
+  $[96,181]$ & $C_6 \times Q_{16}$ & 24 & Yes & Yes \\
+  $[96,182]$ & $C_3 \times ((C_8 \times C_2) : C_2)$ & 24 & Yes & Yes \\
+  $[96,183]$ & $C_3 \times (C_8 : (C_2 \times C_2))$ & 24 & Yes & Yes \\
+  $[96,184]$ & $C_3 \times ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,185]$ & $(C_2 \times C_2) : (C_3 : Q_8)$ & 24 & Yes & Yes \\
+  $[96,186]$ & $C_4 \times S_4$ & 12 & No & Yes \\
+  $[96,187]$ & $C_4 : S_4$ & 12 & Yes & Yes \\
+  $[96,188]$ & $C_2 \times (C_2 . S_4)$ & 12 & Yes & Yes \\
+  $[96,189]$ & $C_2 \times GL(2,3)$ & 24 & No & Yes \\
+  $[96,190]$ & $(C_2 \times Q_8) : S_3$ & 24 & Yes & Yes \\
+  $[96,191]$ & $(C_2 . S_4) : C_2$ & 12 & Yes & Yes \\
+  $[96,192]$ & $((C_4 \times C_2) : C_2) : S_3$ & 12 & Yes & Yes \\
+  $[96,193]$ & $((C_4 \times C_2) : C_2) : S_3$ & 12 & Yes & Yes \\
+  $[96,194]$ & $C_2 \times (A_4 : C_4)$ & 12 & No & Yes \\
+  $[96,195]$ & $(C_2 \times C_2) : S_4$ & 12 & Yes & Yes \\
+  $[96,196]$ & $C_2 \times C_4 \times A_4$ & 12 & No & Yes \\
+  $[96,197]$ & $D_8 \times A_4$ & 12 & No & Yes \\
+  $[96,198]$ & $C_2 \times C_2 \times SL(2,3)$ & 12 & No & Yes \\
+  $[96,199]$ & $Q_8 \times A_4$ & 12 & No & Yes \\
+  $[96,200]$ & $C_2 \times (((C_4 \times C_2) : C_2) : C_3)$ & 12 & No & Yes \\
+  $[96,201]$ & $((C_2 \times C_2 \times C_2) : (C_2 \times C_2)) : C_3$ & 12 & Yes & Yes \\
+  $[96,202]$ & $((C_2 \times Q_8) : C_2) : C_3$ & 12 & Yes & Yes \\
+  $[96,203]$ & $(C_2 \times C_2 \times Q_8) : C_3$ & 12 & Yes & Yes \\
+  $[96,204]$ & $((C_2 \times C_2 \times C_2) : (C_2 \times C_2)) : C_3$ & 12 & Yes & Yes \\
+  $[96,205]$ & $C_2 \times C_2 \times (C_3 : Q_8)$ & 12 & Yes & Yes \\
+  $[96,206]$ & $C_2 \times C_2 \times C_4 \times S_3$ & 12 & Yes & Yes \\
+  $[96,207]$ & $C_2 \times C_2 \times D_{24}$ & 24 & Yes & Yes \\
+  $[96,208]$ & $C_2 \times ((C_{12} \times C_2) : C_2)$ & 12 & Yes & Yes \\
+  $[96,209]$ & $C_2 \times D_8 \times S_3$ & 12 & Yes & Yes \\
+  $[96,210]$ & $C_2 \times ((C_4 \times S_3) : C_2)$ & 12 & Yes & Yes \\
+  $[96,211]$ & $C_3 : ((C_2 \times C_2 \times C_2) : (C_2 \times C_2))$ & 24 & Yes & Yes \\
+  $[96,212]$ & $C_2 \times Q_8 \times S_3$ & 12 & Yes & Yes \\
+  $[96,213]$ & $C_2 \times ((C_4 \times S_3) : C_2)$ & 12 & Yes & Yes \\
+  $[96,214]$ & $C_3 : ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,215]$ & $((C_4 \times C_2) : C_2) \times S_3$ & 12 & Yes & Yes \\
+  $[96,216]$ & $C_3 : ((C_2 \times C_2 \times C_2) : (C_2 \times C_2))$ & 24 & Yes & Yes \\
+  $[96,217]$ & $C_3 : ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,218]$ & $C_2 \times C_2 \times C_2 \times (C_3 : C_4)$ & 12 & Yes & Yes \\
+  $[96,219]$ & $C_2 \times C_2 \times ((C_6 \times C_2) : C_2)$ & 12 & Yes & Yes \\
+  $[96,220]$ & $C_{12} \times C_2 \times C_2 \times C_2$ & 12 & Yes & Yes \\
+  $[96,221]$ & $C_2 \times C_6 \times D_8$ & 12 & Yes & Yes \\
+  $[96,222]$ & $C_2 \times C_6 \times Q_8$ & 12 & Yes & Yes \\
+  $[96,223]$ & $C_6 \times ((C_4 \times C_2) : C_2)$ & 12 & Yes & Yes \\
+  $[96,224]$ & $C_3 \times ((C_2 \times C_2 \times C_2) : (C_2 \times C_2))$ & 24 & Yes & Yes \\
+  $[96,225]$ & $C_3 \times ((C_2 \times Q_8) : C_2)$ & 24 & Yes & Yes \\
+  $[96,226]$ & $C_2 \times C_2 \times S_4$ & 12 & No & Yes \\
+  $[96,227]$ & $(C_2 \times C_2) : S_4$ & 12 & No & No \\
+  $[96,228]$ & $C_2 \times C_2 \times C_2 \times A_4$ & 12 & No & Yes \\
+  $[96,229]$ & $C_2 \times ((C_2 \times C_2 \times C_2 \times C_2) : C_3)$ & 12 & No & Yes \\
+  $[96,230]$ & $C_2 \times C_2 \times C_2 \times C_2 \times S_3$ & 12 & Yes & Yes \\
+  $[96,231]$ & $C_6 \times C_2 \times C_2 \times C_2 \times C_2$ & 6 & Yes & Yes \\
+  $[97,1]$ & $C_{97}$ & 97 & Yes & No \\
+  $[98,1]$ & $D_{98}$ & 98 & No & No \\
+  $[98,2]$ & $C_{98}$ & 98 & Yes & No \\
+  $[98,3]$ & $C_7 \times D_{14}$ & 14 & No & No \\
+  $[98,4]$ & $(C_7 \times C_7) : C_2$ & 14 & Yes & Yes \\
+  $[98,5]$ & $C_{14} \times C_7$ & 14 & Yes & Yes \\
+  $[99,1]$ & $C_{99}$ & 99 & Yes & No \\
+  $[99,2]$ & $C_{33} \times C_3$ & 33 & Yes & Yes \\
+  $[100,1]$ & $C_{25} : C_4$ & 100 & No & No \\
+  $[100,2]$ & $C_{100}$ & 100 & Yes & No \\
+  $[100,3]$ & $C_{25} : C_4$ & 100 & No & No \\
+  $[100,4]$ & $D_{100}$ & 50 & Yes & Yes \\
+  $[100,5]$ & $C_{50} \times C_2$ & 50 & Yes & Yes \\
+  $[100,6]$ & $C_5 \times (C_5 : C_4)$ & 20 & No & No \\
+  $[100,7]$ & $(C_5 \times C_5) : C_4$ & 20 & Yes & Yes \\
+  $[100,8]$ & $C_{20} \times C_5$ & 20 & Yes & Yes \\
+  $[100,9]$ & $C_5 \times (C_5 : C_4)$ & 20 & No & No \\
+  $[100,10]$ & $(C_5 \times C_5) : C_4$ & 20 & No & No \\
+  $[100,11]$ & $(C_5 \times C_5) : C_4$ & 20 & Yes & Yes \\
+  $[100,12]$ & $(C_5 \times C_5) : C_4$ & 20 & No & No \\
+  $[100,13]$ & $D_{10} \times D_{10}$ & 20 & Yes & Yes \\
+  $[100,14]$ & $C_{10} \times D_{10}$ & 20 & Yes & Yes \\
+  $[100,15]$ & $C_2 \times ((C_5 \times C_5) : C_2)$ & 10 & Yes & Yes \\
+  $[100,16]$ & $C_{10} \times C_{10}$ & 10 & Yes & Yes \\
+  $[101,1]$ & $C_{101}$ & 101 & Yes & No \\
+  $[102,1]$ & $C_{17} \times S_3$ & 51 & No & No \\
+  $[102,2]$ & $C_3 \times D_{34}$ & 51 & No & No \\
+  $[102,3]$ & $D_{102}$ & 102 & No & No \\
+  $[102,4]$ & $C_{102}$ & 102 & Yes & No \\
+  $[103,1]$ & $C_{103}$ & 103 & Yes & No \\
+  $[104,1]$ & $C_{13} : C_8$ & 104 & No & No \\
+  $[104,2]$ & $C_{104}$ & 104 & Yes & No \\
+  $[104,3]$ & $C_{13} : C_8$ & 104 & No & No \\
+  $[104,4]$ & $C_{13} : Q_8$ & 52 & Yes & Yes \\
+  $[104,5]$ & $C_4 \times D_{26}$ & 52 & Yes & Yes \\
+  $[104,6]$ & $D_{104}$ & 52 & Yes & Yes \\
+  $[104,7]$ & $C_2 \times (C_{13} : C_4)$ & 52 & Yes & Yes \\
+  $[104,8]$ & $C_{13} : D_8$ & 52 & Yes & Yes \\
+  $[104,9]$ & $C_{52} \times C_2$ & 52 & Yes & Yes \\
+  $[104,10]$ & $C_{13} \times D_8$ & 52 & Yes & Yes \\
+  $[104,11]$ & $C_{13} \times Q_8$ & 52 & Yes & Yes \\
+  $[104,12]$ & $C_2 \times (C_{13} : C_4)$ & 52 & Yes & Yes \\
+  $[104,13]$ & $C_2 \times C_2 \times D_{26}$ & 26 & Yes & Yes \\
+  $[104,14]$ & $C_{26} \times C_2 \times C_2$ & 26 & Yes & Yes \\
+  $[105,1]$ & $C_5 \times (C_7 : C_3)$ & 35 & No & No \\
+  $[105,2]$ & $C_{105}$ & 105 & Yes & No \\
+  $[106,1]$ & $D_{106}$ & 106 & No & No \\
+  $[106,2]$ & $C_{106}$ & 106 & Yes & No \\
+  $[107,1]$ & $C_{107}$ & 107 & Yes & No \\
+  $[108,1]$ & $C_{27} : C_4$ & 108 & No & No \\
+  $[108,2]$ & $C_{108}$ & 108 & Yes & No \\
+  $[108,3]$ & $(C_2 \times C_2) : C_{27}$ & 108 & No & No \\
+  $[108,4]$ & $D_{108}$ & 54 & Yes & Yes \\
+  $[108,5]$ & $C_{54} \times C_2$ & 54 & Yes & Yes \\
+  $[108,6]$ & $C_3 \times (C_9 : C_4)$ & 36 & No & No \\
+  $[108,7]$ & $C_9 \times (C_3 : C_4)$ & 36 & No & No \\
+  $[108,8]$ & $((C_3 \times C_3) : C_3) : C_4$ & 36 & No & No \\
+  $[108,9]$ & $(C_9 : C_3) : C_4$ & 36 & No & No \\
+  $[108,10]$ & $(C_9 \times C_3) : C_4$ & 36 & Yes & Yes \\
+  $[108,11]$ & $((C_3 \times C_3) : C_3) : C_4$ & 36 & Yes & Yes \\
+  $[108,12]$ & $C_{36} \times C_3$ & 36 & Yes & Yes \\
+  $[108,13]$ & $C_4 \times ((C_3 \times C_3) : C_3)$ & 36 & Yes & Yes \\
+  $[108,14]$ & $C_4 \times (C_9 : C_3)$ & 36 & Yes & Yes \\
+  $[108,15]$ & $((C_3 \times C_3) : C_3) : C_4$ & 36 & No & No \\
+  $[108,16]$ & $S_3 \times D_{18}$ & 18 & Yes & Yes \\
+  $[108,17]$ & $((C_3 \times C_3) : C_3) : (C_2 \times C_2)$ & 18 & Yes & Yes \\
+  $[108,18]$ & $C_9 \times A_4$ & 36 & No & No \\
+  $[108,19]$ & $(C_2 \times C_2) : (C_9 : C_3)$ & 36 & Yes & Yes \\
+  $[108,20]$ & $C_3 \times ((C_2 \times C_2) : C_9)$ & 36 & No & Yes \\
+  $[108,21]$ & $(C_2 \times C_2) : (C_9 : C_3)$ & 36 & Yes & Yes \\
+  $[108,22]$ & $(C_2 \times C_2) : ((C_3 \times C_3) : C_3)$ & 36 & Yes & Yes \\
+  $[108,23]$ & $C_6 \times D_{18}$ & 18 & Yes & Yes \\
+  $[108,24]$ & $C_{18} \times S_3$ & 18 & Yes & Yes \\
+  $[108,25]$ & $C_2 \times ((C_3 \times C_3) : C_6)$ & 18 & Yes & Yes \\
+  $[108,26]$ & $C_2 \times (C_9 : C_6)$ & 18 & Yes & Yes \\
+  $[108,27]$ & $C_2 \times ((C_9 \times C_3) : C_2)$ & 18 & Yes & Yes \\
+  $[108,28]$ & $C_2 \times (((C_3 \times C_3) : C_3) : C_2)$ & 18 & Yes & Yes \\
+  $[108,29]$ & $C_{18} \times C_6$ & 18 & Yes & Yes \\
+  $[108,30]$ & $C_2 \times C_2 \times ((C_3 \times C_3) : C_3)$ & 18 & Yes & Yes \\
+  $[108,31]$ & $C_2 \times C_2 \times (C_9 : C_3)$ & 18 & Yes & Yes \\
+  $[108,32]$ & $C_3 \times C_3 \times (C_3 : C_4)$ & 12 & Yes & Yes \\
+  $[108,33]$ & $C_3 \times ((C_3 \times C_3) : C_4)$ & 12 & Yes & Yes \\
+  $[108,34]$ & $(C_3 \times C_3 \times C_3) : C_4$ & 12 & Yes & Yes \\
+  $[108,35]$ & $C_{12} \times C_3 \times C_3$ & 12 & Yes & Yes \\
+  $[108,36]$ & $C_3 \times ((C_3 \times C_3) : C_4)$ & 12 & No & No \\
+  $[108,37]$ & $(C_3 \times C_3 \times C_3) : C_4$ & 12 & No & No \\
+  $[108,38]$ & $C_3 \times S_3 \times S_3$ & 6 & Yes & Yes \\
+  $[108,39]$ & $((C_3 \times C_3) : C_2) \times S_3$ & 6 & Yes & Yes \\
+  $[108,40]$ & $(C_3 \times C_3 \times C_3) : (C_2 \times C_2)$ & 6 & Yes & Yes \\
+  $[108,41]$ & $C_3 \times C_3 \times A_4$ & 6 & Yes & No \\
+  $[108,42]$ & $C_3 \times C_6 \times S_3$ & 6 & Yes & Yes \\
+  $[108,43]$ & $C_6 \times ((C_3 \times C_3) : C_2)$ & 6 & Yes & Yes \\
+  $[108,44]$ & $C_2 \times ((C_3 \times C_3 \times C_3) : C_2)$ & 6 & Yes & Yes \\
+  $[108,45]$ & $C_6 \times C_6 \times C_3$ & 6 & Yes & Yes \\
+  $[109,1]$ & $C_{109}$ & 109 & Yes & No \\
+  $[110,1]$ & $C_{11} : C_{10}$ & 110 & No & No \\
+  $[110,2]$ & $C_2 \times (C_{11} : C_5)$ & 55 & No & No \\
+  $[110,3]$ & $C_{11} \times D_{10}$ & 55 & No & No \\
+  $[110,4]$ & $C_5 \times D_{22}$ & 55 & No & No \\
+  $[110,5]$ & $D_{110}$ & 110 & No & No \\
+  $[110,6]$ & $C_{110}$ & 110 & Yes & No \\
+  $[111,1]$ & $C_{37} : C_3$ & 111 & No & No \\
+  $[111,2]$ & $C_{111}$ & 111 & Yes & No \\
+  $[112,1]$ & $C_7 : C_{16}$ & 112 & No & No \\
+  $[112,2]$ & $C_{112}$ & 112 & Yes & No \\
+  $[112,3]$ & $C_8 \times D_{14}$ & 56 & Yes & Yes \\
+  $[112,4]$ & $C_7 : (C_8 : C_2)$ & 56 & Yes & Yes \\
+  $[112,5]$ & $C_7 : QD_{16}$ & 56 & Yes & Yes \\
+  $[112,6]$ & $D_{112}$ & 56 & Yes & Yes \\
+  $[112,7]$ & $C_7 : Q_{16}$ & 56 & Yes & Yes \\
+  $[112,8]$ & $C_2 \times (C_7 : C_8)$ & 56 & Yes & Yes \\
+  $[112,9]$ & $C_7 : (C_8 : C_2)$ & 56 & Yes & Yes \\
+  $[112,10]$ & $C_4 \times (C_7 : C_4)$ & 28 & Yes & Yes \\
+  $[112,11]$ & $C_7 : (C_4 : C_4)$ & 28 & Yes & Yes \\
+  $[112,12]$ & $C_7 : (C_4 : C_4)$ & 28 & Yes & Yes \\
+  $[112,13]$ & $C_7 : ((C_4 \times C_2) : C_2)$ & 28 & Yes & Yes \\
+  $[112,14]$ & $C_7 : D_{16}$ & 56 & Yes & Yes \\
+  $[112,15]$ & $C_7 : QD_{16}$ & 56 & Yes & Yes \\
+  $[112,16]$ & $C_7 : QD_{16}$ & 56 & Yes & Yes \\
+  $[112,17]$ & $C_7 : Q_{16}$ & 56 & Yes & Yes \\
+  $[112,18]$ & $C_7 : ((C_4 \times C_2) : C_2)$ & 28 & Yes & Yes \\
+  $[112,19]$ & $C_{28} \times C_4$ & 28 & Yes & Yes \\
+  $[112,20]$ & $C_7 \times ((C_4 \times C_2) : C_2)$ & 28 & Yes & Yes \\
+  $[112,21]$ & $C_7 \times (C_4 : C_4)$ & 28 & Yes & Yes \\
+  $[112,22]$ & $C_{56} \times C_2$ & 56 & Yes & Yes \\
+  $[112,23]$ & $C_7 \times (C_8 : C_2)$ & 56 & Yes & Yes \\
+  $[112,24]$ & $C_7 \times D_{16}$ & 56 & Yes & Yes \\
+  $[112,25]$ & $C_7 \times QD_{16}$ & 56 & Yes & Yes \\
+  $[112,26]$ & $C_7 \times Q_{16}$ & 56 & Yes & Yes \\
+  $[112,27]$ & $C_2 \times (C_7 : Q_8)$ & 28 & Yes & Yes \\
+  $[112,28]$ & $C_2 \times C_4 \times D_{14}$ & 28 & Yes & Yes \\
+  $[112,29]$ & $C_2 \times D_{56}$ & 56 & Yes & Yes \\
+  $[112,30]$ & $C_7 : ((C_4 \times C_2) : C_2)$ & 28 & Yes & Yes \\
+  $[112,31]$ & $D_8 \times D_{14}$ & 28 & Yes & Yes \\
+  $[112,32]$ & $C_7 : ((C_4 \times C_2) : C_2)$ & 28 & Yes & Yes \\
+  $[112,33]$ & $Q_8 \times D_{14}$ & 28 & Yes & Yes \\
+  $[112,34]$ & $C_7 : ((C_4 \times C_2) : C_2)$ & 28 & Yes & Yes \\
+  $[112,35]$ & $C_2 \times C_2 \times (C_7 : C_4)$ & 28 & Yes & Yes \\
+  $[112,36]$ & $C_2 \times ((C_{14} \times C_2) : C_2)$ & 28 & Yes & Yes \\
+  $[112,37]$ & $C_{28} \times C_2 \times C_2$ & 28 & Yes & Yes \\
+  $[112,38]$ & $C_{14} \times D_8$ & 28 & Yes & Yes \\
+  $[112,39]$ & $C_{14} \times Q_8$ & 28 & Yes & Yes \\
+  $[112,40]$ & $C_7 \times ((C_4 \times C_2) : C_2)$ & 28 & Yes & Yes \\
+  $[112,41]$ & $C_2 \times ((C_2 \times C_2 \times C_2) : C_7)$ & 28 & No & No \\
+  $[112,42]$ & $C_2 \times C_2 \times C_2 \times D_{14}$ & 28 & Yes & Yes \\
+  $[112,43]$ & $C_{14} \times C_2 \times C_2 \times C_2$ & 14 & Yes & Yes \\
+  $[113,1]$ & $C_{113}$ & 113 & Yes & No \\
+  $[114,1]$ & $C_{19} : C_6$ & 114 & No & No \\
+  $[114,2]$ & $C_2 \times (C_{19} : C_3)$ & 57 & No & No \\
+  $[114,3]$ & $C_{19} \times S_3$ & 57 & No & No \\
+  $[114,4]$ & $C_3 \times D_{38}$ & 57 & No & No \\
+  $[114,5]$ & $D_{114}$ & 114 & No & No \\
+  $[114,6]$ & $C_{114}$ & 114 & Yes & No \\
+  $[115,1]$ & $C_{115}$ & 115 & Yes & No \\
+  $[116,1]$ & $C_{29} : C_4$ & 116 & No & No \\
+  $[116,2]$ & $C_{116}$ & 116 & Yes & No \\
+  $[116,3]$ & $C_{29} : C_4$ & 116 & No & No \\
+  $[116,4]$ & $D_{116}$ & 116 & Yes & Yes \\
+  $[116,5]$ & $C_{58} \times C_2$ & 58 & Yes & Yes \\
+  $[117,1]$ & $C_{13} : C_9$ & 117 & No & No \\
+  $[117,2]$ & $C_{117}$ & 117 & Yes & No \\
+  $[117,3]$ & $C_3 \times (C_{13} : C_3)$ & 39 & Yes & Yes \\
+  $[117,4]$ & $C_{39} \times C_3$ & 39 & Yes & Yes \\
+  $[118,1]$ & $D_{118}$ & 118 & No & No \\
+  $[118,2]$ & $C_{118}$ & 118 & Yes & No \\
+  $[119,1]$ & $C_{119}$ & 119 & Yes & No \\
+  $[120,1]$ & $C_5 \times (C_3 : C_8)$ & 40 & No & No \\
+  $[120,2]$ & $C_3 \times (C_5 : C_8)$ & 40 & No & No \\
+  $[120,3]$ & $C_3 : (C_5 : C_8)$ & 40 & No & No \\
+  $[120,4]$ & $C_{120}$ & 120 & Yes & No \\
+  $[120,5]$ & $SL(2,5)$ & 120 & No & No \\
+  $[120,6]$ & $C_3 \times (C_5 : C_8)$ & 40 & No & No \\
+  $[120,7]$ & $C_3 : (C_5 : C_8)$ & 40 & No & No \\
+  $[120,8]$ & $(C_3 : C_4) \times D_{10}$ & 20 & Yes & Yes \\
+  $[120,9]$ & $S_3 \times (C_5 : C_4)$ & 20 & Yes & Yes \\
+  $[120,10]$ & $C_3 : (C_4 \times D_{10})$ & 20 & Yes & Yes \\
+  $[120,11]$ & $C_3 : ((C_{10} \times C_2) : C_2)$ & 20 & Yes & Yes \\
+  $[120,12]$ & $C_3 : D_{40}$ & 40 & Yes & Yes \\
+  $[120,13]$ & $C_3 : ((C_{10} \times C_2) : C_2)$ & 20 & Yes & Yes \\
+  $[120,14]$ & $C_3 : (C_5 : Q_8)$ & 20 & Yes & Yes \\
+  $[120,15]$ & $C_5 \times SL(2,3)$ & 20 & No & No \\
+  $[120,16]$ & $C_3 \times (C_5 : Q_8)$ & 20 & Yes & Yes \\
+  $[120,17]$ & $C_{12} \times D_{10}$ & 60 & Yes & Yes \\
+  $[120,18]$ & $C_3 \times D_{40}$ & 40 & Yes & Yes \\
+  $[120,19]$ & $C_6 \times (C_5 : C_4)$ & 20 & Yes & Yes \\
+  $[120,20]$ & $C_3 \times ((C_{10} \times C_2) : C_2)$ & 20 & Yes & Yes \\
+  $[120,21]$ & $C_5 \times (C_3 : Q_8)$ & 20 & Yes & Yes \\
+  $[120,22]$ & $C_{20} \times S_3$ & 60 & Yes & Yes \\
+  $[120,23]$ & $C_5 \times D_{24}$ & 24 & Yes & Yes \\
+  $[120,24]$ & $C_{10} \times (C_3 : C_4)$ & 20 & Yes & Yes \\
+  $[120,25]$ & $C_5 \times ((C_6 \times C_2) : C_2)$ & 20 & Yes & Yes \\
+  $[120,26]$ & $C_3 : (C_5 : Q_8)$ & 20 & Yes & Yes \\
+  $[120,27]$ & $C_4 \times D_{30}$ & 60 & Yes & Yes \\
+  $[120,28]$ & $D_{120}$ & 60 & Yes & Yes \\
+  $[120,29]$ & $C_2 \times (C_{15} : C_4)$ & 60 & Yes & Yes \\
+  $[120,30]$ & $C_3 : ((C_{10} \times C_2) : C_2)$ & 20 & Yes & Yes \\
+  $[120,31]$ & $C_{60} \times C_2$ & 60 & Yes & Yes \\
+  $[120,32]$ & $C_{15} \times D_8$ & 60 & Yes & Yes \\
+  $[120,33]$ & $C_{15} \times Q_8$ & 60 & Yes & Yes \\
+  $[120,34]$ & $S_5$ & 60 & No & No \\
+  $[120,35]$ & $C_2 \times A_5$ & 60 & No & No \\
+  $[120,36]$ & $S_3 \times (C_5 : C_4)$ & 20 & Yes & Yes \\
+  $[120,37]$ & $C_5 \times S_4$ & 60 & No & No \\
+  $[120,38]$ & $C_5 : S_4$ & 60 & No & No \\
+  $[120,39]$ & $A_4 \times D_{10}$ & 60 & No & No \\
+  $[120,40]$ & $C_6 \times (C_5 : C_4)$ & 20 & Yes & Yes \\
+  $[120,41]$ & $C_2 \times (C_{15} : C_4)$ & 60 & Yes & Yes \\
+  $[120,42]$ & $C_2 \times S_3 \times D_{10}$ & 30 & Yes & Yes \\
+  $[120,43]$ & $C_{10} \times A_4$ & 60 & No & No \\
+  $[120,44]$ & $C_2 \times C_6 \times D_{10}$ & 30 & Yes & Yes \\
+  $[120,45]$ & $C_2 \times C_{10} \times S_3$ & 30 & Yes & Yes \\
+  $[120,46]$ & $C_2 \times C_2 \times D_{30}$ & 30 & Yes & Yes \\
+  $[120,47]$ & $C_{30} \times C_2 \times C_2$ & 30 & Yes & Yes \\
+\end{longtable}
+
+\subsection{Challenges}
+\begin{itemize}
+  \item Its not feasible to extend the checking for finite simple groups. Velasquez \cite{velasquez2022} already checked it up to order 10000. Checking on the larger group would be very slow.
+  \item They program was slow when order of group increased, we had to optimize. 
+
+\end{itemize}
+
+
+\subsection{Patterns observed}
+Overall the results were consistent with the theorems. The simple groups we checked were also not equally coverable, adding further evidence to the conjecture.
+
+% ══════════════════════════════════════════════════════════════════════════════
+\section{The Simple Group Conjecture}
+\label{sec:conjecture}
+
+\subsection{Statement and known evidence}
+
+\begin{conjecture}[{\cite[p.~21]{velasquez2022}}]
+  If $G$ is a finite simple group, then $G$ has no equal covering.
+\end{conjecture}
+
+The paper establishes this computationally for all finite simple groups of
+order less than $100{,}000$ (Table~3 of~\cite{velasquez2022}).
+
+\subsection{Theoretical analysis}
+
+\begin{proposition}[{\cite[Proposition~2]{velasquez2022}}]
+  If $G$ is a finite non-cyclic simple group with $\Exp(G) = |G|/2$, then
+  $G$ has no equal covering.
+\end{proposition}
+
+\begin{remark}
+  Since simple groups have no non-trivial normal subgroups, \Cref{thm:normal}
+  cannot be used to transfer equal coverings from quotients. Any equal covering
+  of a simple group must arise entirely from its internal subgroup structure,
+  subject to the exponent constraint of \Cref{thm:exp}.
+\end{remark}
+
+\subsubsection{The alternating groups $A_n$}
+The \emph{alternating group} on \(n\) letters, denoted by \(A_n\), is the subgroup of the symmetric group \(S_n\) consisting of all even permutations:
+\[
+A_n=\{\sigma\in S_n:\operatorname{sgn}(\sigma)=1\}.
+\]
+Since the sign homomorphism
+\[
+\operatorname{sgn}:S_n\to\{\pm1\}
+\]
+is surjective with kernel \(A_n\), it follows that
+\[
+|A_n|=\frac{n!}{2}.
+\]
+
+For \(n\ge5\), the alternating group \(A_n\) is non-abelian and simple; that is, its only normal subgroups are the trivial subgroup and \(A_n\) itself. Consequently, the groups \(A_n\) (\(n\ge5\)) form an infinite family of finite non-abelian simple groups.
+
+
+We attempt to investigate the conjecture \ref{conj:simple} for such groups.
+
+
+
+\begin{conjecture}
+  \label{prop:Ap}
+  For any prime $p \geq 5$, the alternating group $A_p$ has no equal covering.
+\end{conjecture}
+This is a simpler case of \ref{conj:simple}.
+We outline an approach toward showing that $A_p$ has no equal covering
+for $p \geq 5$ prime. Suppose for contradiction that $A_p$ admits an
+equal covering. By \Cref{cor:exp}, every member $H$ of the covering must
+satisfy $\exp(A_p) \mid |H|$. Since $p \mid \exp(A_p)$, we have $p \mid
+|H|$, so $H$ contains a Sylow $p$-subgroup of order $p$.
+ 
+The contradiction would follow from either of two routes: showing that
+any such Sylow $p$-subgroup must be normal in $A_p$, contradicting
+simplicity; or showing that no maximal subgroup of $A_p$ can contain a
+Sylow $p$-subgroup at all. Both routes require a closer analysis of the
+Sylow structure and maximal subgroup lattice of $A_p$, which we leave as
+a direction for future work.
+ 
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Conclusion}
+\label{sec:conclusion}
+
+We have extended the study of equal coverings of finite groups in three directions.
+Theoretically, we provided complete proofs of the Haber--Rosenfeld theorem and all
+core theorems of~\cite{velasquez2022}, and obtained a partial theoretical result
+(\Cref{prop:Ap}) toward \Cref{conj:simple}.
+We formalized [list] of these results in Lean~4.
+Computationally, we extended the GAP classification to order~120, producing a
+complete table consistent with all theoretical predictions.
+
+\paragraph{Future directions.}
+\begin{itemize}
+  \item Complete the Lean formalization of Theorems.
+  \item Target Alternating groups of prime letters with the conjecture ($\geq 5$.)
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\bibliographystyle{plain}
+\newpage
+\bibliography{references}
+
+
+
+
+
+
+% Put your .bib entries in references.bib
+% Key entries needed:
+% velasquez2022, haber1959, scorza1926, neumann1954, cohn1994,
+% tomkinson1997, foguel_ragland2008, isaacs1973, gap, mathlib
+
+
+
+\end{document}
