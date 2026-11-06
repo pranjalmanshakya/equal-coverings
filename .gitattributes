@@ -1,0 +1,5 @@
+# Show the GAP and Lean code, not the LaTeX write-ups, in GitHub's language bar
+*.g linguist-language=GAP
+*.tex linguist-documentation
+*.bib linguist-documentation
+presentation/** linguist-documentation
